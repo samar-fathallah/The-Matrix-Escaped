@@ -48,7 +48,7 @@ public class Matrix extends GeneralSearchProblem {
         for (int i = 0; i < this.grid.length; i++) {
             System.out.print("[  ");
             for (int j = 0; j < this.grid[0].length; j++) {
-                System.out.print((this.grid[i][j] != null ? this.grid[i][j].toString().split("@")[0].substring(5, 7) : "NA") + "  ");
+                System.out.print((this.grid[i][j] != null ? this.grid[i][j].toString().split("@")[0].substring(13, 15) : "NA") + "  ");
             }
             System.out.println("]");
         }
