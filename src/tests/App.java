@@ -1,6 +1,6 @@
 package tests;
 
-import code.Matrix;
+import code.matrix.Matrix;
 
 public class App {
     public static void main(String[] args) {
