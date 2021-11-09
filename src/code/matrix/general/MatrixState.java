@@ -22,7 +22,7 @@ public class MatrixState extends State {
     public ArrayList<Hostage> hostages;
 
     public MatrixState(String state) {
-        // Decode string of the state into state objct
+        // Decode string of the state into state object
         String[] splitState = state.split(";");
         String[] gridDimensions = splitState[0].split(",");
         this.m = Integer.parseInt(gridDimensions[0]);
@@ -33,8 +33,8 @@ public class MatrixState extends State {
         this.pills = Pill.createPills(splitState[5]);
         this.pads = Pad.createPads(splitState[6]);
         this.hostages = Hostage.createHostages(splitState[7]);
-
         this.grid = new Object[m][n];
+
         this.grid[this.telephoneBooth.position.x][this.telephoneBooth.position.y] = this.telephoneBooth;
         for (Agent agent : this.agents) {
             if (!agent.isKilled) {
@@ -53,6 +53,11 @@ public class MatrixState extends State {
             if (this.grid[hostage.position.x][hostage.position.y] == null && !hostage.isCarried && !hostage.isKilled) {
                 this.grid[hostage.position.x][hostage.position.y] = hostage;
             }
+
+            // Update carriedHostages array in neo
+            if (hostage.isCarried) {
+                this.neo.carriedHostages.add(hostage);
+            }
         }
     }
 
@@ -65,11 +70,13 @@ public class MatrixState extends State {
         for (int i = 0; i < this.agents.size(); i++) {
             Agent agent = this.agents.get(i);
             stateString += agent.position.x + "," + agent.position.y;
+            stateString += "," + (agent.isKilled ? "t" : "f");
             stateString += i == this.agents.size()-1 ? ";" : ",";
         }
         for (int i = 0; i < this.pills.size(); i++) {
             Pill pill = this.pills.get(i);
             stateString += pill.position.x + "," + pill.position.y;
+            stateString += "," + (pill.isTaken ? "t" : "f");
             stateString += i == this.pills.size()-1 ? ";" : ",";
         }
         for (int i = 0; i < this.pads.size(); i++) {
@@ -80,8 +87,11 @@ public class MatrixState extends State {
         }
         for (int i = 0; i < this.hostages.size(); i++) {
             Hostage hostage = this.hostages.get(i);
-            stateString += hostage.position.x + "," + hostage.position.y + ",";
-            stateString += hostage.damage;
+            stateString += hostage.position.x + "," + hostage.position.y;
+            stateString += "," + hostage.damage;
+            stateString += "," + (hostage.isAgent ? "t" : "f");
+            stateString += "," + (hostage.isKilled ? "t" : "f");
+            stateString += "," + (hostage.isCarried ? "t" : "f");
             stateString += i == this.hostages.size()-1 ? "" : ",";
         }
         

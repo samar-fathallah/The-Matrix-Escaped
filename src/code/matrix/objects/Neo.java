@@ -10,9 +10,6 @@ public class Neo {
     public int damage;
     public int carryCapacity;
     public ArrayList<Hostage> carriedHostages;
-    public int numberOfAllKills;
-    public int numberOfHostageKills;
-    public int numberOfDeaths;
 
     public Neo(String neoInfo, String carryCapacity) {
         String[] splitInfo = neoInfo.split(",");

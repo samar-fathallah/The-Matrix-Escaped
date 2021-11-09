@@ -11,11 +11,49 @@ import code.searchTree.*;
 public class Matrix extends GeneralSearchProblem {
 
     public Matrix(String initialGrid) {
-        String initialState = initialGrid;
+        // Create the array of opeators
+        operators = new ArrayList<Operator>(9);
+        operators.add(MatrixOperator.UP);
+        operators.add(MatrixOperator.DOWN);
+        operators.add(MatrixOperator.LEFT);
+        operators.add(MatrixOperator.RIGHT);
+        operators.add(MatrixOperator.CARRY);
+        operators.add(MatrixOperator.DROP);
+        operators.add(MatrixOperator.TAKEPILL);
+        operators.add(MatrixOperator.FLY);
+        operators.add(MatrixOperator.KILL);
+        
+        // Split the state info from the genGrid output
+        String[] splitState = initialGrid.split(";");
+        
         // Initialize neo damage to 0
-        String[] splitState = initialState.split(";");
-        splitState[2] = splitState[2] + ",0";
-        initialState = String.join(";", splitState);
+        splitState[2] += ",0";
+        
+        // Initialize agent isKilled to false
+        String[] splitAgentsInfo = splitState[4].split(",");
+        for (int i = 1; i < splitAgentsInfo.length; i+=2) {
+            splitAgentsInfo[i] += ",f";
+        }
+        splitState[4] = String.join(",", splitAgentsInfo);
+
+        // Initialize pills isTaken to false
+        String[] splitPillsInfo = splitState[5].split(",");
+        for (int i = 1; i < splitPillsInfo.length; i+=2) {
+            splitPillsInfo[i] += ",f";
+        }
+        splitState[5] = String.join(",", splitPillsInfo);
+        
+        // Initialize hostages isAgent, isKilled, and isCarried to false
+        String[] splitHostagesInfo = splitState[7].split(",");
+        for (int i = 2; i < splitHostagesInfo.length; i+=3) {
+            splitHostagesInfo[i] += ",f,f,f";
+        }
+        splitState[7] = String.join(",", splitHostagesInfo);
+
+        // Rejoin the state info after adding the extra info 
+        String initialState = String.join(";", splitState);
+
+        // Create the initial state object
         this.initialState = new MatrixState(initialState);
     }
     
