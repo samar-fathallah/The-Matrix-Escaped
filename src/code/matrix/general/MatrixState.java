@@ -144,10 +144,11 @@ public class MatrixState extends State {
             }
             case TAKEPILL: {
                 Pill pill = (Pill) grid[neo.position.x][neo.position.y];
+                grid[neo.position.x][neo.position.y] = null;
                 pill.isTaken = true;
                 neo.damage -= 20;
                 for (Hostage hostage : hostages) {
-                    if (!hostage.isAgent) {
+                    if (!hostage.isAgent && !(hostage.position.equals(telephoneBooth.position) && !hostage.isCarried)) {
                         hostage.damage -= 22;
                         if (hostage.damage < 0) {
                             hostage.damage = 0;

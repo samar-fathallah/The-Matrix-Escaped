@@ -149,14 +149,11 @@ public class Matrix extends GeneralSearchProblem {
                 else {
                     Object object = matrixState.grid[neoPosition.x][neoPosition.y - 1];
                     if (object instanceof Agent) {
-                        Agent agent = (Agent) object;
-                        if (!agent.isKilled) {
-                            isValid = false;
-                        }
+                        isValid = false;
                     }
                     else if (object instanceof Hostage) {
                         Hostage hostage = (Hostage) object;
-                        if (hostage.isAgent && !hostage.isKilled) {
+                        if (hostage.isAgent) {
                             isValid = false;
                         }
                     }
@@ -171,14 +168,11 @@ public class Matrix extends GeneralSearchProblem {
                 else {
                     Object object = matrixState.grid[neoPosition.x][neoPosition.y + 1];
                     if (object instanceof Agent) {
-                        Agent agent = (Agent) object;
-                        if (!agent.isKilled) {
-                            isValid = false;
-                        }
+                        isValid = false;
                     }
                     else if (object instanceof Hostage) {
                         Hostage hostage = (Hostage) object;
-                        if (hostage.isAgent && !hostage.isKilled) {
+                        if (hostage.isAgent) {
                             isValid = false;
                         }
                     }
@@ -193,15 +187,12 @@ public class Matrix extends GeneralSearchProblem {
                 else {
                     Object object = matrixState.grid[neoPosition.x - 1][neoPosition.y];
                     if (object instanceof Agent) {
-                        Agent agent = (Agent) object;
-                        if (!agent.isKilled) {
+                        isValid = false;
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent) {
                             isValid = false;
-                        }
-                        else if (object instanceof Hostage) {
-                            Hostage hostage = (Hostage) object;
-                            if (hostage.isAgent && !hostage.isKilled) {
-                                isValid = false;
-                            }
                         }
                     }
                 }
@@ -215,14 +206,11 @@ public class Matrix extends GeneralSearchProblem {
                 else {
                     Object object = matrixState.grid[neoPosition.x + 1][neoPosition.y];
                     if (object instanceof Agent) {
-                        Agent agent = (Agent) object;
-                        if (!agent.isKilled) {
-                            isValid = false;
-                        }
+                        isValid = false;
                     }
                     else if (object instanceof Hostage) {
                         Hostage hostage = (Hostage) object;
-                        if (hostage.isAgent && !hostage.isKilled) {
+                        if (hostage.isAgent) {
                             isValid = false;
                         }
                     }
@@ -235,20 +223,14 @@ public class Matrix extends GeneralSearchProblem {
                 if (!(object instanceof Hostage)) {
                     isValid = false;
                 }
-                else {
-                    Hostage hostage = (Hostage) object;
-                    if (hostage.isCarried || hostage.isAgent || neo.carriedHostages.size() == neo.carryCapacity) {
-                        isValid = false;
-                    }
+                else if (neo.carriedHostages.size() == neo.carryCapacity) {
+                    isValid = false;
                 }
                 break;
             }
             case DROP: {
                 Neo neo = matrixState.neo;
-                if (!neo.position.equals(matrixState.telephoneBooth.position)) {
-                    isValid = false;
-                }
-                if (neo.carriedHostages.size() == 0) {
+                if (!neo.position.equals(matrixState.telephoneBooth.position) || neo.carriedHostages.size() == 0) {
                     isValid = false;
                 }
                 break;
@@ -258,12 +240,6 @@ public class Matrix extends GeneralSearchProblem {
                 Object object = matrixState.grid[neoPosition.x][neoPosition.y];
                 if (!(object instanceof Pill)) {
                     isValid = false;
-                }
-                else {
-                    Pill pill = (Pill) object;
-                    if (pill.isTaken) {
-                        isValid = false;
-                    }
                 }
                 break;
             }
@@ -280,56 +256,44 @@ public class Matrix extends GeneralSearchProblem {
                 // above cell
                 Object object = neoPosition.y == 0 ? null : matrixState.grid[neoPosition.x][neoPosition.y-1];
                 if (object instanceof Agent) {
-                    Agent agent = (Agent) object;
-                    if (!agent.isKilled) {
-                        break;
-                    }
+                    break;
                 }
                 else if (object instanceof Hostage) {
                     Hostage hostage = (Hostage) object;
-                    if (hostage.isAgent && !hostage.isKilled) {
+                    if (hostage.isAgent) {
                         break;
                     }
                 }
                 // below cell
                 object = neoPosition.y == matrixState.n-1 ? null : matrixState.grid[neoPosition.x][neoPosition.y+1];
                 if (object instanceof Agent) {
-                    Agent agent = (Agent) object;
-                    if (!agent.isKilled) {
-                        break;
-                    }
+                    break;
                 }
                 else if (object instanceof Hostage) {
                     Hostage hostage = (Hostage) object;
-                    if (hostage.isAgent && !hostage.isKilled) {
+                    if (hostage.isAgent) {
                         break;
                     }
                 }
                 // left cell
                 object = neoPosition.y == 0 ? null : matrixState.grid[neoPosition.x-1][neoPosition.y];
                 if (object instanceof Agent) {
-                    Agent agent = (Agent) object;
-                    if (!agent.isKilled) {
-                        break;
-                    }
+                    break;
                 }
                 else if (object instanceof Hostage) {
                     Hostage hostage = (Hostage) object;
-                    if (hostage.isAgent && !hostage.isKilled) {
+                    if (hostage.isAgent) {
                         break;
                     }
                 }
                 // right cell
                 object = neoPosition.y == matrixState.m-1 ? null : matrixState.grid[neoPosition.x+1][neoPosition.y];
                 if (object instanceof Agent) {
-                    Agent agent = (Agent) object;
-                    if (!agent.isKilled) {
-                        break;
-                    }
+                    break;
                 }
                 else if (object instanceof Hostage) {
                     Hostage hostage = (Hostage) object;
-                    if (hostage.isAgent && !hostage.isKilled) {
+                    if (hostage.isAgent) {
                         break;
                     }
                 }
