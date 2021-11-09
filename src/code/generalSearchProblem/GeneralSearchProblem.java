@@ -1,17 +1,18 @@
 package code.generalSearchProblem;
 
 import java.util.ArrayList;
-import java.util.Set;
-import code.generalSearchProblem.general.Operator;
-import code.generalSearchProblem.general.State;
+import code.searchTree.SearchTreeNode;
 
 public abstract class GeneralSearchProblem {
 
     public ArrayList<Operator> operators;
     public State initialState;
-    public Set<State> stateSpace;
-
-    public abstract boolean goalTest(State currentState);
-    public abstract int pathCost(ArrayList<Operator> sequenceOfOperators);
+    
+    // getNextState function is used to generate the state space
+    public abstract String getNextState(State state, Operator operator);
+    
+    public abstract boolean goalTest(State state);
+    
+    public abstract int pathCost(SearchTreeNode node);
     
 }

@@ -1,20 +1,25 @@
 package code.matrix;
 
 import java.util.ArrayList;
-
-import code.generalSearchProblem.GeneralSearchProblem;
-import code.generalSearchProblem.general.Operator;
-import code.generalSearchProblem.general.State;
-import code.matrix.general.MatrixState;
+import code.generalSearchProblem.*;
+import code.matrix.general.*;
 import code.matrix.helpers.*;
+import code.matrix.objects.*;
+import code.searchTree.*;
 
 
 public class Matrix extends GeneralSearchProblem {
 
-    public Matrix(String grid) {
-        this.initialState=new MatrixState(grid);
+    public Matrix(String initialGrid) {
+        String initialState = initialGrid;
+        // Initialize neo damage to 0
+        String[] splitState = initialState.split(";");
+        splitState[2] = splitState[2] + ",0";
+        initialState = String.join(";", splitState);
+        this.initialState = new MatrixState(initialState);
     }
-    public void visualizeGrid() {
+    
+    public void visualizeMatrix() {
         Object[][] grid=((MatrixState)this.initialState).grid;
         for (int i = 0; i < grid.length; i++) {
             System.out.print("[  ");
@@ -117,22 +122,252 @@ public class Matrix extends GeneralSearchProblem {
         return grid;
     }
 
-    public static String solve(String grid, String startegy, boolean visualize) {
-        Matrix matrix = new Matrix(grid);
+    public static String solve(String initialGrid, String startegy, boolean visualize) {
+        Matrix matrix = new Matrix(initialGrid);
         if (visualize) {
-            matrix.visualizeGrid();
+            matrix.visualizeMatrix();
         }
         return "";
     }
 
     @Override
-    public boolean goalTest(State currentState) {
-        // TODO Auto-generated method stub
-        return false;
+    public String getNextState(State state, Operator operator) {
+        MatrixState matrixState = (MatrixState) state;
+        MatrixOperator matrixOperator = (MatrixOperator) operator;
+        if (matrixState.neo.damage >= 100) {
+            return "";
+        }
+
+        String nextState = "";
+        boolean isValid = true;
+        switch (matrixOperator) {
+            case UP: {
+                Position neoPosition = matrixState.neo.position;
+                if (neoPosition.y == 0) {
+                    isValid = false;
+                }
+                else {
+                    Object object = matrixState.grid[neoPosition.x][neoPosition.y - 1];
+                    if (object instanceof Agent) {
+                        Agent agent = (Agent) object;
+                        if (!agent.isKilled) {
+                            isValid = false;
+                        }
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent && !hostage.isKilled) {
+                            isValid = false;
+                        }
+                    }
+                }
+                break;
+            }
+            case DOWN: {
+                Position neoPosition = matrixState.neo.position;
+                if (neoPosition.y == matrixState.n - 1) {
+                    isValid = false;
+                }
+                else {
+                    Object object = matrixState.grid[neoPosition.x][neoPosition.y + 1];
+                    if (object instanceof Agent) {
+                        Agent agent = (Agent) object;
+                        if (!agent.isKilled) {
+                            isValid = false;
+                        }
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent && !hostage.isKilled) {
+                            isValid = false;
+                        }
+                    }
+                }
+                break;
+            } 
+            case LEFT: {
+                Position neoPosition = matrixState.neo.position;
+                if (neoPosition.x == 0) {
+                    isValid = false;
+                }
+                else {
+                    Object object = matrixState.grid[neoPosition.x - 1][neoPosition.y];
+                    if (object instanceof Agent) {
+                        Agent agent = (Agent) object;
+                        if (!agent.isKilled) {
+                            isValid = false;
+                        }
+                        else if (object instanceof Hostage) {
+                            Hostage hostage = (Hostage) object;
+                            if (hostage.isAgent && !hostage.isKilled) {
+                                isValid = false;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+            case RIGHT: {
+                Position neoPosition = matrixState.neo.position;
+                if (neoPosition.x == matrixState.m - 1) {
+                    isValid = false;
+                }
+                else {
+                    Object object = matrixState.grid[neoPosition.x + 1][neoPosition.y];
+                    if (object instanceof Agent) {
+                        Agent agent = (Agent) object;
+                        if (!agent.isKilled) {
+                            isValid = false;
+                        }
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent && !hostage.isKilled) {
+                            isValid = false;
+                        }
+                    }
+                }
+                break;
+            }
+            case CARRY: {
+                Neo neo = matrixState.neo;
+                Object object = matrixState.grid[neo.position.x][neo.position.y];
+                if (!(object instanceof Hostage)) {
+                    isValid = false;
+                }
+                else {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.isCarried || hostage.isAgent || neo.carriedHostages.size() == neo.carryCapacity) {
+                        isValid = false;
+                    }
+                }
+                break;
+            }
+            case DROP: {
+                Neo neo = matrixState.neo;
+                if (!neo.position.equals(matrixState.telephoneBooth.position)) {
+                    isValid = false;
+                }
+                if (neo.carriedHostages.size() == 0) {
+                    isValid = false;
+                }
+                break;
+            }
+            case TAKEPILL: {
+                Position neoPosition = matrixState.neo.position;
+                Object object = matrixState.grid[neoPosition.x][neoPosition.y];
+                if (!(object instanceof Pill)) {
+                    isValid = false;
+                }
+                else {
+                    Pill pill = (Pill) object;
+                    if (pill.isTaken) {
+                        isValid = false;
+                    }
+                }
+                break;
+            }
+            case FLY: {
+                Position neoPosition = matrixState.neo.position;
+                Object object = matrixState.grid[neoPosition.x][neoPosition.y];
+                if (!(object instanceof Pad)) {
+                    isValid = false;
+                }
+                break;
+            }
+            case KILL: {
+                Position neoPosition = matrixState.neo.position;
+                // above cell
+                Object object = neoPosition.y == 0 ? null : matrixState.grid[neoPosition.x][neoPosition.y-1];
+                if (object instanceof Agent) {
+                    Agent agent = (Agent) object;
+                    if (!agent.isKilled) {
+                        break;
+                    }
+                }
+                else if (object instanceof Hostage) {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.isAgent && !hostage.isKilled) {
+                        break;
+                    }
+                }
+                // below cell
+                object = neoPosition.y == matrixState.n-1 ? null : matrixState.grid[neoPosition.x][neoPosition.y+1];
+                if (object instanceof Agent) {
+                    Agent agent = (Agent) object;
+                    if (!agent.isKilled) {
+                        break;
+                    }
+                }
+                else if (object instanceof Hostage) {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.isAgent && !hostage.isKilled) {
+                        break;
+                    }
+                }
+                // left cell
+                object = neoPosition.y == 0 ? null : matrixState.grid[neoPosition.x-1][neoPosition.y];
+                if (object instanceof Agent) {
+                    Agent agent = (Agent) object;
+                    if (!agent.isKilled) {
+                        break;
+                    }
+                }
+                else if (object instanceof Hostage) {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.isAgent && !hostage.isKilled) {
+                        break;
+                    }
+                }
+                // right cell
+                object = neoPosition.y == matrixState.m-1 ? null : matrixState.grid[neoPosition.x+1][neoPosition.y];
+                if (object instanceof Agent) {
+                    Agent agent = (Agent) object;
+                    if (!agent.isKilled) {
+                        break;
+                    }
+                }
+                else if (object instanceof Hostage) {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.isAgent && !hostage.isKilled) {
+                        break;
+                    }
+                }
+                isValid = false;
+                break;
+            }
+            default:
+                break;
+        }
+
+        if (isValid) {
+            matrixState.updateState(matrixOperator);
+            nextState = matrixState.encode();
+        }
+        return nextState;
     }
 
     @Override
-    public int pathCost(ArrayList<Operator> sequenceOfOperators) {
+    public boolean goalTest(State currentState) {
+        MatrixState matrixState = (MatrixState) currentState;
+        boolean neoAtBooth = matrixState.neo.position.equals(matrixState.telephoneBooth.position);
+        boolean hostagesDisappeared = true;
+        for (Hostage hostage : matrixState.hostages) {
+            if (!hostage.position.equals(matrixState.telephoneBooth.position)) {
+                if (!hostage.isKilled)
+                    hostagesDisappeared = false;
+                    break;
+            }
+            else if (hostage.isCarried) {
+                hostagesDisappeared = false;
+                break;
+            }
+        }
+        return neoAtBooth && hostagesDisappeared;
+    }
+    
+    @Override
+    public int pathCost(SearchTreeNode node) {
         // TODO Auto-generated method stub
         return 0;
     }

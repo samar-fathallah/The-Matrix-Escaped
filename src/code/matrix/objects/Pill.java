@@ -7,9 +7,11 @@ import code.matrix.helpers.Position;
 public class Pill {
     
     public Position position;
+    public boolean isTaken;
 
     public Pill(int x, int y) {
         this.position = new Position(x, y);
+        this.isTaken = false;
     }
 
     public static ArrayList<Pill> createPills(String pillsInfo) {

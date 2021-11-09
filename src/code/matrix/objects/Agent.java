@@ -7,9 +7,11 @@ import code.matrix.helpers.Position;
 public class Agent {
     
     public Position position;
+    public boolean isKilled;
 
     public Agent(int x, int y) {
         this.position = new Position(x, y);
+        this.isKilled = false;
     }
 
     public static ArrayList<Agent> createAgents(String agentsInfo) {

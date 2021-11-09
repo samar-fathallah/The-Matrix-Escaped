@@ -1,12 +1,7 @@
 package code.matrix.general;
 
-import code.generalSearchProblem.general.Operator;
+import code.generalSearchProblem.Operator;
 
-public class MatrixOperator extends Operator {
-
-    public MatrixOperator(MatrixOperatorType type, int cost) {
-        this.type = type;
-        this.cost = cost;
-    }
-
+public enum MatrixOperator implements Operator {
+    UP, DOWN, LEFT, RIGHT, CARRY, DROP, TAKEPILL, FLY, KILL
 }

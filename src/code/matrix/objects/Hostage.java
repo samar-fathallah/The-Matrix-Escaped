@@ -9,11 +9,15 @@ public class Hostage {
     public Position position;
     public int damage;
     public boolean isAgent;
+    public boolean isKilled;
+    public boolean isCarried;
 
     public Hostage(int x, int y, int damage) {
         this.position = new Position(x, y);
         this.damage = damage;
         this.isAgent = false;
+        this.isKilled = false;
+        this.isCarried = false;
     }
 
     public static ArrayList<Hostage> createHostages(String hostagesInfo) {
