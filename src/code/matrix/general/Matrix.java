@@ -1,11 +1,12 @@
 package code.matrix.general;
 
 import java.util.ArrayList;
-import code.generalSearchProblem.*;
+
+import code.generalsearchproblem.*;
 import code.matrix.helpers.*;
 import code.matrix.objects.*;
 
-public class Matrix extends GeneralSearchProblem {
+public class Matrix extends SearchProblem {
 
     public Matrix(String initialGrid) {
         // Create and populate the array of opeators

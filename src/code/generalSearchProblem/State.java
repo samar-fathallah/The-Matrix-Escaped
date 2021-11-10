@@ -1,4 +1,4 @@
-package code.generalSearchProblem;
+package code.generalsearchproblem;
 
 public abstract class State {
     

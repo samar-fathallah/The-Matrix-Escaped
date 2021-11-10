@@ -1,8 +1,8 @@
-package code.generalSearchProblem;
+package code.generalsearchproblem;
 
 import java.util.ArrayList;
 
-public abstract class GeneralSearchProblem {
+public abstract class SearchProblem {
 
     public ArrayList<Operator> operators;
     public State initialState;

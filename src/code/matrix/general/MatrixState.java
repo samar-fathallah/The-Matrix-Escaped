@@ -1,7 +1,8 @@
 package code.matrix.general;
 
 import java.util.ArrayList;
-import code.generalSearchProblem.State;
+
+import code.generalsearchproblem.State;
 import code.matrix.objects.*;
 
 public class MatrixState extends State {
