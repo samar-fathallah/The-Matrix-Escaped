@@ -1,7 +1,6 @@
 package code.matrix.objects;
 
 import java.util.ArrayList;
-
 import code.matrix.helpers.Position;
 
 public class Pad {
@@ -18,7 +17,11 @@ public class Pad {
         String[] splitInfo = padsInfo.split(",");
         ArrayList<Pad> pads = new ArrayList<Pad>();
         for (int i = 0; i < splitInfo.length; i+=4) { 
-            Pad newPad = new Pad(Integer.parseInt(splitInfo[i]), Integer.parseInt(splitInfo[i+1]), Integer.parseInt(splitInfo[i+2]), Integer.parseInt(splitInfo[i+3]));
+            int x1 = Integer.parseInt(splitInfo[i]);
+            int y1 = Integer.parseInt(splitInfo[i+1]);
+            int x2 = Integer.parseInt(splitInfo[i+2]);
+            int y2 = Integer.parseInt(splitInfo[i+3]);
+            Pad newPad = new Pad(x1, y1, x2, y2);
             pads.add(newPad);
         }
         return pads;

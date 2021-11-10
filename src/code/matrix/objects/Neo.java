@@ -1,7 +1,6 @@
 package code.matrix.objects;
 
 import java.util.ArrayList;
-
 import code.matrix.helpers.Position;
 
 public class Neo {
@@ -13,8 +12,10 @@ public class Neo {
 
     public Neo(String neoInfo, String carryCapacity) {
         String[] splitInfo = neoInfo.split(",");
-        this.position = new Position(Integer.parseInt(splitInfo[0]), Integer.parseInt(splitInfo[1]));
+        int x = Integer.parseInt(splitInfo[0]);
+        int y = Integer.parseInt(splitInfo[1]);
         this.damage = Integer.parseInt(splitInfo[2]);
+        this.position = new Position(x, y);
         this.carryCapacity = Integer.parseInt(carryCapacity);
         this.carriedHostages = new ArrayList<Hostage>(this.carryCapacity);
     }

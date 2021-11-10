@@ -1,7 +1,6 @@
 package code.matrix.objects;
 
 import java.util.ArrayList;
-
 import code.matrix.helpers.Position;
 
 public class Agent {
@@ -20,7 +19,7 @@ public class Agent {
         for (int i = 0; i < splitInfo.length; i+=3) { 
             int x = Integer.parseInt(splitInfo[i]);
             int y = Integer.parseInt(splitInfo[i+1]);
-            boolean isKilled = splitInfo[i+2] == "f" ? false : true;
+            boolean isKilled = splitInfo[i+2].equals("f") ? false : true;
             Agent newAgent = new Agent(x, y, isKilled);
             agents.add(newAgent);
         }

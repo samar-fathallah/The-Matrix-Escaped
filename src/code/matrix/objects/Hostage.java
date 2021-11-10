@@ -1,7 +1,6 @@
 package code.matrix.objects;
 
 import java.util.ArrayList;
-
 import code.matrix.helpers.Position;
 
 public class Hostage {
@@ -27,9 +26,9 @@ public class Hostage {
             int x = Integer.parseInt(splitInfo[i]);
             int y = Integer.parseInt(splitInfo[i+1]);
             int damage = Integer.parseInt(splitInfo[i+2]);
-            boolean isAgent = splitInfo[i+3] == "f" ? false : true;
-            boolean isKilled = splitInfo[i+4] == "f" ? false : true;
-            boolean isCarried = splitInfo[i+5] == "f" ? false : true;
+            boolean isAgent = splitInfo[i+3].equals("f") ? false : true;
+            boolean isKilled = splitInfo[i+4].equals("f") ? false : true;
+            boolean isCarried = splitInfo[i+5].equals("f") ? false : true;
             Hostage newHostage = new Hostage(x, y, damage, isAgent, isKilled, isCarried);
             hostages.add(newHostage);
         }

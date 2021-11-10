@@ -1,27 +1,24 @@
-package code.matrix;
+package code.matrix.general;
 
 import java.util.ArrayList;
 import code.generalSearchProblem.*;
-import code.matrix.general.*;
 import code.matrix.helpers.*;
 import code.matrix.objects.*;
-import code.searchTree.*;
-
 
 public class Matrix extends GeneralSearchProblem {
 
     public Matrix(String initialGrid) {
-        // Create the array of opeators
-        operators = new ArrayList<Operator>(9);
-        operators.add(MatrixOperator.UP);
-        operators.add(MatrixOperator.DOWN);
-        operators.add(MatrixOperator.LEFT);
-        operators.add(MatrixOperator.RIGHT);
-        operators.add(MatrixOperator.CARRY);
-        operators.add(MatrixOperator.DROP);
-        operators.add(MatrixOperator.TAKEPILL);
-        operators.add(MatrixOperator.FLY);
-        operators.add(MatrixOperator.KILL);
+        // Create and populate the array of opeators
+        this.operators = new ArrayList<Operator>(9);
+        this.operators.add(MatrixOperator.UP);
+        this.operators.add(MatrixOperator.DOWN);
+        this.operators.add(MatrixOperator.LEFT);
+        this.operators.add(MatrixOperator.RIGHT);
+        this.operators.add(MatrixOperator.CARRY);
+        this.operators.add(MatrixOperator.DROP);
+        this.operators.add(MatrixOperator.TAKEPILL);
+        this.operators.add(MatrixOperator.FLY);
+        this.operators.add(MatrixOperator.KILL);
         
         // Split the state info from the genGrid output
         String[] splitState = initialGrid.split(";");
@@ -51,21 +48,10 @@ public class Matrix extends GeneralSearchProblem {
         splitState[7] = String.join(",", splitHostagesInfo);
 
         // Rejoin the state info after adding the extra info 
-        String initialState = String.join(";", splitState);
+        String initialStateString = String.join(";", splitState);
 
         // Create the initial state object
-        this.initialState = new MatrixState(initialState);
-    }
-    
-    public void visualizeMatrix() {
-        Object[][] grid=((MatrixState)this.initialState).grid;
-        for (int i = 0; i < grid.length; i++) {
-            System.out.print("[  ");
-            for (int j = 0; j < grid[0].length; j++) {
-                System.out.print((grid[i][j] != null ? grid[i][j].toString().split("@")[0].substring(13, 15) : "NA") + "  ");
-            }
-            System.out.println("]");
-        }
+        this.initialState = new MatrixState(initialStateString);
     }
     
     public static String genGrid() {
@@ -167,7 +153,18 @@ public class Matrix extends GeneralSearchProblem {
         }
         return "";
     }
-
+    
+    public void visualizeMatrix() {
+        Object[][] grid = ((MatrixState) this.initialState).grid;
+        for (int i = 0; i < grid.length; i++) {
+            System.out.print("[  ");
+            for (int j = 0; j < grid[0].length; j++) {
+                System.out.print((grid[i][j] != null ? grid[i][j].toString().split("@")[0].substring(20, 22) : "NA") + "  ");
+            }
+            System.out.println("]");
+        }
+    }
+    
     @Override
     public String getNextState(State state, Operator operator) {
         MatrixState matrixState = (MatrixState) state;
@@ -350,8 +347,8 @@ public class Matrix extends GeneralSearchProblem {
     }
 
     @Override
-    public boolean goalTest(State currentState) {
-        MatrixState matrixState = (MatrixState) currentState;
+    public boolean goalTest(State state) {
+        MatrixState matrixState = (MatrixState) state;
         boolean neoAtBooth = matrixState.neo.position.equals(matrixState.telephoneBooth.position);
         boolean hostagesDisappeared = true;
         for (Hostage hostage : matrixState.hostages) {

@@ -1,7 +1,6 @@
 package code.generalSearchProblem;
 
 import java.util.ArrayList;
-import code.searchTree.SearchTreeNode;
 
 public abstract class GeneralSearchProblem {
 

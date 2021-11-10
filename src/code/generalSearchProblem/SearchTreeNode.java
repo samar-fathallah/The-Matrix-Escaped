@@ -1,6 +1,4 @@
-package code.searchTree;
-
-import code.generalSearchProblem.Operator;
+package code.generalSearchProblem;
 
 public class SearchTreeNode {
     
@@ -13,6 +11,10 @@ public class SearchTreeNode {
     // Constructor For Root Node Creation
     public SearchTreeNode(String state) {
         this.state = state;
+        this.parent = null;
+        this.operator = null;
+        this.depth = 0;
+        this.pathCost = 0;
     }
     
     // Constructor For Other Nodes

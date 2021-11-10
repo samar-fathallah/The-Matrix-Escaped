@@ -2,12 +2,7 @@ package code.matrix.general;
 
 import java.util.ArrayList;
 import code.generalSearchProblem.State;
-import code.matrix.objects.Agent;
-import code.matrix.objects.Hostage;
-import code.matrix.objects.Neo;
-import code.matrix.objects.Pad;
-import code.matrix.objects.Pill;
-import code.matrix.objects.TelephoneBooth;
+import code.matrix.objects.*;
 
 public class MatrixState extends State {
     
@@ -21,18 +16,18 @@ public class MatrixState extends State {
     public ArrayList<Pad> pads;
     public ArrayList<Hostage> hostages;
 
-    public MatrixState(String state) {
+    public MatrixState(String stateString) {
         // Decode string of the state into state object
-        String[] splitState = state.split(";");
-        String[] gridDimensions = splitState[0].split(",");
+        String[] splitStateString = stateString.split(";");
+        String[] gridDimensions = splitStateString[0].split(",");
         this.m = Integer.parseInt(gridDimensions[0]);
         this.n = Integer.parseInt(gridDimensions[1]);
-        this.neo = new Neo(splitState[2], splitState[1]);
-        this.telephoneBooth = new TelephoneBooth(splitState[3]);
-        this.agents = Agent.createAgents(splitState[4]);
-        this.pills = Pill.createPills(splitState[5]);
-        this.pads = Pad.createPads(splitState[6]);
-        this.hostages = Hostage.createHostages(splitState[7]);
+        this.neo = new Neo(splitStateString[2], splitStateString[1]);
+        this.telephoneBooth = new TelephoneBooth(splitStateString[3]);
+        this.agents = Agent.createAgents(splitStateString[4]);
+        this.pills = Pill.createPills(splitStateString[5]);
+        this.pads = Pad.createPads(splitStateString[6]);
+        this.hostages = Hostage.createHostages(splitStateString[7]);
         this.grid = new Object[m][n];
 
         this.grid[this.telephoneBooth.position.x][this.telephoneBooth.position.y] = this.telephoneBooth;
@@ -59,43 +54,6 @@ public class MatrixState extends State {
                 this.neo.carriedHostages.add(hostage);
             }
         }
-    }
-
-    @Override
-    public String encode() {
-        String stateString = "";
-        stateString += this.m + "," + this.n + ";" + this.neo.carryCapacity + ";";
-        stateString += this.neo.position.x + "," + this.neo.position.y + "," + this.neo.damage + ";";
-        stateString += this.telephoneBooth.position.x + "," + this.telephoneBooth.position.y + ";";
-        for (int i = 0; i < this.agents.size(); i++) {
-            Agent agent = this.agents.get(i);
-            stateString += agent.position.x + "," + agent.position.y;
-            stateString += "," + (agent.isKilled ? "t" : "f");
-            stateString += i == this.agents.size()-1 ? ";" : ",";
-        }
-        for (int i = 0; i < this.pills.size(); i++) {
-            Pill pill = this.pills.get(i);
-            stateString += pill.position.x + "," + pill.position.y;
-            stateString += "," + (pill.isTaken ? "t" : "f");
-            stateString += i == this.pills.size()-1 ? ";" : ",";
-        }
-        for (int i = 0; i < this.pads.size(); i++) {
-            Pad pad = this.pads.get(i);
-            stateString += pad.start.x + "," + pad.start.y + ",";
-            stateString += pad.finish.x + "," + pad.finish.y;
-            stateString += i == this.pads.size()-1 ? ";" : ",";
-        }
-        for (int i = 0; i < this.hostages.size(); i++) {
-            Hostage hostage = this.hostages.get(i);
-            stateString += hostage.position.x + "," + hostage.position.y;
-            stateString += "," + hostage.damage;
-            stateString += "," + (hostage.isAgent ? "t" : "f");
-            stateString += "," + (hostage.isKilled ? "t" : "f");
-            stateString += "," + (hostage.isCarried ? "t" : "f");
-            stateString += i == this.hostages.size()-1 ? "" : ",";
-        }
-        
-        return stateString;
     }
 
     public void updateState(MatrixOperator operator) {
@@ -233,5 +191,42 @@ public class MatrixState extends State {
                 break;
         }
     }
+    
+    @Override
+    public String encode() {
+        String stateString = "";
+        stateString += this.m + "," + this.n + ";" + this.neo.carryCapacity + ";";
+        stateString += this.neo.position.x + "," + this.neo.position.y + "," + this.neo.damage + ";";
+        stateString += this.telephoneBooth.position.x + "," + this.telephoneBooth.position.y + ";";
+        for (int i = 0; i < this.agents.size(); i++) {
+            Agent agent = this.agents.get(i);
+            stateString += agent.position.x + "," + agent.position.y;
+            stateString += "," + (agent.isKilled ? "t" : "f");
+            stateString += i == this.agents.size()-1 ? ";" : ",";
+        }
+        for (int i = 0; i < this.pills.size(); i++) {
+            Pill pill = this.pills.get(i);
+            stateString += pill.position.x + "," + pill.position.y;
+            stateString += "," + (pill.isTaken ? "t" : "f");
+            stateString += i == this.pills.size()-1 ? ";" : ",";
+        }
+        for (int i = 0; i < this.pads.size(); i++) {
+            Pad pad = this.pads.get(i);
+            stateString += pad.start.x + "," + pad.start.y + ",";
+            stateString += pad.finish.x + "," + pad.finish.y;
+            stateString += i == this.pads.size()-1 ? ";" : ",";
+        }
+        for (int i = 0; i < this.hostages.size(); i++) {
+            Hostage hostage = this.hostages.get(i);
+            stateString += hostage.position.x + "," + hostage.position.y;
+            stateString += "," + hostage.damage;
+            stateString += "," + (hostage.isAgent ? "t" : "f");
+            stateString += "," + (hostage.isKilled ? "t" : "f");
+            stateString += "," + (hostage.isCarried ? "t" : "f");
+            stateString += i == this.hostages.size()-1 ? "" : ",";
+        }
+        
+        return stateString;
+    }
 
-}
+    }

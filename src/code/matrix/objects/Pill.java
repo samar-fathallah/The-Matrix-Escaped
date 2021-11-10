@@ -1,7 +1,6 @@
 package code.matrix.objects;
 
 import java.util.ArrayList;
-
 import code.matrix.helpers.Position;
 
 public class Pill {
@@ -20,7 +19,7 @@ public class Pill {
         for (int i = 0; i < splitInfo.length; i+=3) { 
             int x = Integer.parseInt(splitInfo[i]);
             int y = Integer.parseInt(splitInfo[i+1]);
-            boolean isTaken = splitInfo[i+2] == "f" ? false : true;
+            boolean isTaken = splitInfo[i+2].equals("f") ? false : true;
             Pill newPill = new Pill(x, y, isTaken);
             pills.add(newPill);
         }
