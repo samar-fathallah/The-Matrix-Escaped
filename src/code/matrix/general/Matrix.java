@@ -167,55 +167,16 @@ public class Matrix extends SearchProblem {
     }
     
     @Override
-    public String getNextState(State state, Operator operator) {
+    public State getNextState(State state, Operator operator) {
         MatrixState matrixState = (MatrixState) state;
         MatrixOperator matrixOperator = (MatrixOperator) operator;
         if (matrixState.neo.damage >= 100) {
-            return "";
+            return null;
         }
 
-        String nextState = "";
         boolean isValid = true;
         switch (matrixOperator) {
             case UP: {
-                Position neoPosition = matrixState.neo.position;
-                if (neoPosition.y == 0) {
-                    isValid = false;
-                }
-                else {
-                    Object object = matrixState.grid[neoPosition.x][neoPosition.y - 1];
-                    if (object instanceof Agent) {
-                        isValid = false;
-                    }
-                    else if (object instanceof Hostage) {
-                        Hostage hostage = (Hostage) object;
-                        if (hostage.isAgent) {
-                            isValid = false;
-                        }
-                    }
-                }
-                break;
-            }
-            case DOWN: {
-                Position neoPosition = matrixState.neo.position;
-                if (neoPosition.y == matrixState.n - 1) {
-                    isValid = false;
-                }
-                else {
-                    Object object = matrixState.grid[neoPosition.x][neoPosition.y + 1];
-                    if (object instanceof Agent) {
-                        isValid = false;
-                    }
-                    else if (object instanceof Hostage) {
-                        Hostage hostage = (Hostage) object;
-                        if (hostage.isAgent) {
-                            isValid = false;
-                        }
-                    }
-                }
-                break;
-            } 
-            case LEFT: {
                 Position neoPosition = matrixState.neo.position;
                 if (neoPosition.x == 0) {
                     isValid = false;
@@ -234,13 +195,51 @@ public class Matrix extends SearchProblem {
                 }
                 break;
             }
-            case RIGHT: {
+            case DOWN: {
                 Position neoPosition = matrixState.neo.position;
-                if (neoPosition.x == matrixState.m - 1) {
+                if (neoPosition.x == matrixState.n - 1) {
                     isValid = false;
                 }
                 else {
                     Object object = matrixState.grid[neoPosition.x + 1][neoPosition.y];
+                    if (object instanceof Agent) {
+                        isValid = false;
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent) {
+                            isValid = false;
+                        }
+                    }
+                }
+                break;
+            } 
+            case LEFT: {
+                Position neoPosition = matrixState.neo.position;
+                if (neoPosition.y == 0) {
+                    isValid = false;
+                }
+                else {
+                    Object object = matrixState.grid[neoPosition.x][neoPosition.y - 1];
+                    if (object instanceof Agent) {
+                        isValid = false;
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent) {
+                            isValid = false;
+                        }
+                    }
+                }
+                break;
+            }
+            case RIGHT: {
+                Position neoPosition = matrixState.neo.position;
+                if (neoPosition.y == matrixState.m - 1) {
+                    isValid = false;
+                }
+                else {
+                    Object object = matrixState.grid[neoPosition.x][neoPosition.y + 1];
                     if (object instanceof Agent) {
                         isValid = false;
                     }
@@ -290,7 +289,7 @@ public class Matrix extends SearchProblem {
             case KILL: {
                 Position neoPosition = matrixState.neo.position;
                 // above cell
-                Object object = neoPosition.y == 0 ? null : matrixState.grid[neoPosition.x][neoPosition.y-1];
+                Object object = neoPosition.x == 0 ? null : matrixState.grid[neoPosition.x-1][neoPosition.y];
                 if (object instanceof Agent) {
                     break;
                 }
@@ -301,7 +300,7 @@ public class Matrix extends SearchProblem {
                     }
                 }
                 // below cell
-                object = neoPosition.y == matrixState.n-1 ? null : matrixState.grid[neoPosition.x][neoPosition.y+1];
+                object = neoPosition.x == matrixState.n-1 ? null : matrixState.grid[neoPosition.x+1][neoPosition.y];
                 if (object instanceof Agent) {
                     break;
                 }
@@ -312,7 +311,7 @@ public class Matrix extends SearchProblem {
                     }
                 }
                 // left cell
-                object = neoPosition.y == 0 ? null : matrixState.grid[neoPosition.x-1][neoPosition.y];
+                object = neoPosition.y == 0 ? null : matrixState.grid[neoPosition.x][neoPosition.y-1];
                 if (object instanceof Agent) {
                     break;
                 }
@@ -323,7 +322,7 @@ public class Matrix extends SearchProblem {
                     }
                 }
                 // right cell
-                object = neoPosition.y == matrixState.m-1 ? null : matrixState.grid[neoPosition.x+1][neoPosition.y];
+                object = neoPosition.y == matrixState.m-1 ? null : matrixState.grid[neoPosition.x][neoPosition.y+1];
                 if (object instanceof Agent) {
                     break;
                 }
@@ -340,11 +339,12 @@ public class Matrix extends SearchProblem {
                 break;
         }
 
-        if (isValid) {
-            matrixState.updateState(matrixOperator);
-            nextState = matrixState.encode();
+        if (!isValid) {
+            return null;
         }
-        return nextState;
+        
+        matrixState.updateState(matrixOperator);
+        return matrixState;
     }
 
     @Override

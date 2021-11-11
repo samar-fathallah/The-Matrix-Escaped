@@ -8,7 +8,7 @@ public abstract class SearchProblem {
     public State initialState;
     
     // getNextState function is used to generate the state space
-    public abstract String getNextState(State state, Operator operator);
+    public abstract State getNextState(State state, Operator operator);
     
     public abstract boolean goalTest(State state);
     

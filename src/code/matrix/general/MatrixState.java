@@ -71,30 +71,30 @@ public class MatrixState extends State {
         }
         switch (operator) {
             case UP: {
-                neo.position.y--;
-                for (Hostage hostage : neo.carriedHostages) {
-                    hostage.position.y--;
-                }
-                break;
-            }
-            case DOWN: {
-                neo.position.y++;
-                for (Hostage hostage : neo.carriedHostages) {
-                    hostage.position.y++;
-                }
-                break;
-            }
-            case LEFT: {
                 neo.position.x--;
                 for (Hostage hostage : neo.carriedHostages) {
                     hostage.position.x--;
                 }
                 break;
             }
-            case RIGHT: {
+            case DOWN: {
                 neo.position.x++;
                 for (Hostage hostage : neo.carriedHostages) {
                     hostage.position.x++;
+                }
+                break;
+            }
+            case LEFT: {
+                neo.position.y--;
+                for (Hostage hostage : neo.carriedHostages) {
+                    hostage.position.y--;
+                }
+                break;
+            }
+            case RIGHT: {
+                neo.position.y++;
+                for (Hostage hostage : neo.carriedHostages) {
+                    hostage.position.y++;
                 }
                 break;
             }
@@ -102,6 +102,7 @@ public class MatrixState extends State {
                 Hostage hostage = (Hostage) grid[neo.position.x][neo.position.y];
                 hostage.isCarried = true;
                 neo.carriedHostages.add(hostage);
+                grid[neo.position.x][neo.position.y] = null;
                 break;
             }
             case DROP: {
@@ -138,52 +139,60 @@ public class MatrixState extends State {
             }
             case KILL: {
                 neo.damage += 20;
-                Object above = neo.position.y == 0 ? null : grid[neo.position.x][neo.position.y-1];
-                Object below = neo.position.y == n-1 ? null : grid[neo.position.x][neo.position.y+1];
-                Object left = neo.position.x == 0 ? null : grid[neo.position.x-1][neo.position.y];
-                Object right = neo.position.x == m-1 ? null : grid[neo.position.x+1][neo.position.y];
+                Object above = neo.position.x == 0 ? null : grid[neo.position.x-1][neo.position.y];
+                Object below = neo.position.x == n-1 ? null : grid[neo.position.x+1][neo.position.y];
+                Object left = neo.position.y == 0 ? null : grid[neo.position.x][neo.position.y-1];
+                Object right = neo.position.y == m-1 ? null : grid[neo.position.x][neo.position.y+1];
                 // above cell
                 if (above instanceof Agent) {
                     Agent agent = (Agent) above;
                     agent.isKilled = true;
+                    grid[neo.position.x-1][neo.position.y] = null;
                 }
                 else if (above instanceof Hostage) {
                     Hostage hostage = (Hostage) above;
                     if (hostage.isAgent) {
                         hostage.isKilled = true;
+                        grid[neo.position.x-1][neo.position.y] = null;
                     }
                 }
                 // below cell
                 if (below instanceof Agent) {
                     Agent agent = (Agent) below;
                     agent.isKilled = true;
+                    grid[neo.position.x+1][neo.position.y] = null;
                 }
                 else if (below instanceof Hostage) {
                     Hostage hostage = (Hostage) below;
                     if (hostage.isAgent) {
                         hostage.isKilled = true;
+                        grid[neo.position.x+1][neo.position.y] = null;
                     }
                 }
                 // left cell
                 if (left instanceof Agent) {
                     Agent agent = (Agent) left;
                     agent.isKilled = true;
+                    grid[neo.position.x][neo.position.y-1] = null;
                 }
                 else if (left instanceof Hostage) {
                     Hostage hostage = (Hostage) left;
                     if (hostage.isAgent) {
                         hostage.isKilled = true;
+                        grid[neo.position.x][neo.position.y-1] = null;
                     }
                 }
                 // right cell
                 if (right instanceof Agent) {
                     Agent agent = (Agent) right;
                     agent.isKilled = true;
+                    grid[neo.position.x][neo.position.y+1] = null;
                 }
                 else if (right instanceof Hostage) {
                     Hostage hostage = (Hostage) right;
                     if (hostage.isAgent) {
                         hostage.isKilled = true;
+                        grid[neo.position.x][neo.position.y+1] = null;
                     }
                 }
                 break;
