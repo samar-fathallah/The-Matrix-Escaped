@@ -1,7 +1,6 @@
 package code.matrix.general;
 
 import java.util.ArrayList;
-
 import code.generalsearchproblem.*;
 import code.matrix.helpers.*;
 import code.matrix.objects.*;
@@ -170,26 +169,27 @@ public class Matrix extends SearchProblem {
     public State getNextState(State state, Operator operator) {
         MatrixState matrixState = (MatrixState) state;
         MatrixOperator matrixOperator = (MatrixOperator) operator;
+        
         if (matrixState.neo.damage >= 100) {
             return null;
         }
 
-        boolean isValid = true;
+        boolean isValidOperator = true;
         switch (matrixOperator) {
             case UP: {
                 Position neoPosition = matrixState.neo.position;
                 if (neoPosition.x == 0) {
-                    isValid = false;
+                    isValidOperator = false;
                 }
                 else {
                     Object object = matrixState.grid[neoPosition.x - 1][neoPosition.y];
                     if (object instanceof Agent) {
-                        isValid = false;
+                        isValidOperator = false;
                     }
                     else if (object instanceof Hostage) {
                         Hostage hostage = (Hostage) object;
                         if (hostage.isAgent) {
-                            isValid = false;
+                            isValidOperator = false;
                         }
                     }
                 }
@@ -198,17 +198,17 @@ public class Matrix extends SearchProblem {
             case DOWN: {
                 Position neoPosition = matrixState.neo.position;
                 if (neoPosition.x == matrixState.n - 1) {
-                    isValid = false;
+                    isValidOperator = false;
                 }
                 else {
                     Object object = matrixState.grid[neoPosition.x + 1][neoPosition.y];
                     if (object instanceof Agent) {
-                        isValid = false;
+                        isValidOperator = false;
                     }
                     else if (object instanceof Hostage) {
                         Hostage hostage = (Hostage) object;
                         if (hostage.isAgent) {
-                            isValid = false;
+                            isValidOperator = false;
                         }
                     }
                 }
@@ -217,17 +217,17 @@ public class Matrix extends SearchProblem {
             case LEFT: {
                 Position neoPosition = matrixState.neo.position;
                 if (neoPosition.y == 0) {
-                    isValid = false;
+                    isValidOperator = false;
                 }
                 else {
                     Object object = matrixState.grid[neoPosition.x][neoPosition.y - 1];
                     if (object instanceof Agent) {
-                        isValid = false;
+                        isValidOperator = false;
                     }
                     else if (object instanceof Hostage) {
                         Hostage hostage = (Hostage) object;
                         if (hostage.isAgent) {
-                            isValid = false;
+                            isValidOperator = false;
                         }
                     }
                 }
@@ -236,17 +236,17 @@ public class Matrix extends SearchProblem {
             case RIGHT: {
                 Position neoPosition = matrixState.neo.position;
                 if (neoPosition.y == matrixState.m - 1) {
-                    isValid = false;
+                    isValidOperator = false;
                 }
                 else {
                     Object object = matrixState.grid[neoPosition.x][neoPosition.y + 1];
                     if (object instanceof Agent) {
-                        isValid = false;
+                        isValidOperator = false;
                     }
                     else if (object instanceof Hostage) {
                         Hostage hostage = (Hostage) object;
                         if (hostage.isAgent) {
-                            isValid = false;
+                            isValidOperator = false;
                         }
                     }
                 }
@@ -256,17 +256,17 @@ public class Matrix extends SearchProblem {
                 Neo neo = matrixState.neo;
                 Object object = matrixState.grid[neo.position.x][neo.position.y];
                 if (!(object instanceof Hostage)) {
-                    isValid = false;
+                    isValidOperator = false;
                 }
                 else if (neo.carriedHostages.size() == neo.carryCapacity) {
-                    isValid = false;
+                    isValidOperator = false;
                 }
                 break;
             }
             case DROP: {
                 Neo neo = matrixState.neo;
                 if (!neo.position.equals(matrixState.telephoneBooth.position) || neo.carriedHostages.size() == 0) {
-                    isValid = false;
+                    isValidOperator = false;
                 }
                 break;
             }
@@ -274,7 +274,7 @@ public class Matrix extends SearchProblem {
                 Position neoPosition = matrixState.neo.position;
                 Object object = matrixState.grid[neoPosition.x][neoPosition.y];
                 if (!(object instanceof Pill)) {
-                    isValid = false;
+                    isValidOperator = false;
                 }
                 break;
             }
@@ -282,7 +282,7 @@ public class Matrix extends SearchProblem {
                 Position neoPosition = matrixState.neo.position;
                 Object object = matrixState.grid[neoPosition.x][neoPosition.y];
                 if (!(object instanceof Pad)) {
-                    isValid = false;
+                    isValidOperator = false;
                 }
                 break;
             }
@@ -332,19 +332,20 @@ public class Matrix extends SearchProblem {
                         break;
                     }
                 }
-                isValid = false;
+                isValidOperator = false;
                 break;
             }
             default:
                 break;
         }
 
-        if (!isValid) {
+        if (!isValidOperator) {
             return null;
         }
         
-        matrixState.updateState(matrixOperator);
-        return matrixState;
+        State nextState = matrixState.clone();
+        nextState.updateState(matrixOperator);
+        return nextState;
     }
 
     @Override

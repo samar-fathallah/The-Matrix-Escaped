@@ -14,9 +14,9 @@ public class Hostage {
     public Hostage(int x, int y, int damage, boolean isAgent, boolean isKilled, boolean isCarried) {
         this.position = new Position(x, y);
         this.damage = damage;
-        this.isAgent = false;
-        this.isKilled = false;
-        this.isCarried = false;
+        this.isAgent = isAgent;
+        this.isKilled = isKilled;
+        this.isCarried = isCarried;
     }
 
     public static ArrayList<Hostage> createHostages(String hostagesInfo) {
