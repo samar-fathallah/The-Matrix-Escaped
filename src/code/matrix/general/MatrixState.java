@@ -57,6 +57,25 @@ public class MatrixState extends State {
     }
 
     @Override
+    public String toString() {
+        String result = "";
+        Object[][] grid = this.grid;
+        for (int i = 0; i < grid.length; i++) {
+            result += "[  ";
+            for (int j = 0; j < grid[0].length; j++) {
+                result +=  (grid[i][j] != null ? grid[i][j].toString().split("@")[0].substring(20, 22) : "NA") + "  ";
+            }
+            result += "]" + "\n";
+        }
+        return result;
+    }
+
+    @Override
+    public State clone() {
+        return new MatrixState(this.encode());
+    }
+
+    @Override
     public String encode() {
         String stateString = "";
         stateString += this.m + "," + this.n + ";" + this.neo.carryCapacity + ";";
@@ -91,11 +110,6 @@ public class MatrixState extends State {
         }
         
         return stateString;
-    }
-
-    @Override
-    public State clone() {
-        return new MatrixState(this.encode());
     }
 
     @Override

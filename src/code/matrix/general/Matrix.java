@@ -149,20 +149,9 @@ public class Matrix extends SearchProblem {
     public static String solve(String initialGrid, String startegy, boolean visualize) {
         Matrix matrix = new Matrix(initialGrid);
         if (visualize) {
-            matrix.visualizeMatrix();
+            System.out.println(matrix.initialState);
         }
         return "";
-    }
-    
-    public void visualizeMatrix() {
-        Object[][] grid = ((MatrixState) this.initialState).grid;
-        for (int i = 0; i < grid.length; i++) {
-            System.out.print("[  ");
-            for (int j = 0; j < grid[0].length; j++) {
-                System.out.print((grid[i][j] != null ? grid[i][j].toString().split("@")[0].substring(20, 22) : "NA") + "  ");
-            }
-            System.out.println("]");
-        }
     }
     
     @Override
