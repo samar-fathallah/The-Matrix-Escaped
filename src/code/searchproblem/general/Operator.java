@@ -1,4 +1,4 @@
-package code.generalsearchproblem;
+package code.searchproblem.general;
 
 public interface Operator {
     

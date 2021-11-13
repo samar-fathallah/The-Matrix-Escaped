@@ -1,6 +1,6 @@
 package tests;
 
-import code.generalsearchproblem.*;
+import code.searchproblem.general.*;
 import code.matrix.general.*;
 
 public class App {

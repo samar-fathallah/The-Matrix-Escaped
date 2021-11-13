@@ -1,7 +1,7 @@
 package code.matrix.general;
 
 import java.util.ArrayList;
-import code.generalsearchproblem.*;
+import code.searchproblem.general.*;
 import code.matrix.helpers.*;
 import code.matrix.objects.*;
 
@@ -52,106 +52,6 @@ public class Matrix extends SearchProblem {
 
         // Create the initial state object
         this.initialState = new MatrixState(initialStateString);
-    }
-    
-    public static String genGrid() {
-        // Generate grid size
-        int m = HelperMethods.genrateRandomInt(5, 16);
-        int n = HelperMethods.genrateRandomInt(5, 16);
-    
-        // Generate number of hostages, pills, pads and agents
-        int numberOfAvailablePositions = m * n;
-        numberOfAvailablePositions -= 2;
-        int numberOfHostages = HelperMethods.genrateRandomInt(3, 11);
-        numberOfAvailablePositions -= numberOfHostages;
-        int numberOfPills = HelperMethods.genrateRandomInt(1, numberOfHostages+1);
-        numberOfAvailablePositions -= numberOfPills;
-        int numberOfPads = HelperMethods.genrateRandomInt(1, (int) Math.ceil(numberOfAvailablePositions/2.0));
-        numberOfAvailablePositions -= numberOfPads * 2;
-        int numberOfAgents = HelperMethods.genrateRandomInt(1, numberOfAvailablePositions+1);
-        numberOfAvailablePositions -= numberOfAgents;
-    
-        // Generate maximum number of hostages that can be carried
-        int c = HelperMethods.genrateRandomInt(1, 5);
-    
-        // Populate grid
-        ArrayList<Position> taken = new ArrayList<Position>();
-    
-        Position neoPosition = HelperMethods.genrateRandomPosition(m, n, taken);
-        taken.add(neoPosition);
-    
-        Position telephoneBoothPosition = HelperMethods.genrateRandomPosition(m, n, taken);
-        taken.add(telephoneBoothPosition);
-    
-        ArrayList<Position> hostagesPositions = new ArrayList<Position>();
-        ArrayList<Integer> hostagesDamages = new ArrayList<Integer>();
-        for (int i = 0; i < numberOfHostages; i++) {
-            Position hostagePosition = HelperMethods.genrateRandomPosition(m, n, taken);
-            hostagesPositions.add(hostagePosition);
-            taken.add(hostagePosition);
-            hostagesDamages.add(HelperMethods.genrateRandomInt(1, 100));
-        }
-    
-        ArrayList<Position> pillsPositions = new ArrayList<Position>();
-        for (int i = 0; i < numberOfPills; i++) {
-            Position pillPosition = HelperMethods.genrateRandomPosition(m, n, taken);
-            pillsPositions.add(pillPosition);
-            taken.add(pillPosition);
-        }
-    
-        ArrayList<Position> startPadsPositions = new ArrayList<Position>();
-        ArrayList<Position> finishPadsPositions = new ArrayList<Position>();
-        for (int i = 0; i < numberOfPads; i++) {
-            Position startPadPosition = HelperMethods.genrateRandomPosition(m, n, taken);
-            taken.add(startPadPosition);
-            startPadsPositions.add(startPadPosition);
-            Position finishPadPosition = HelperMethods.genrateRandomPosition(m, n, taken);
-            taken.add(finishPadPosition);
-            finishPadsPositions.add(finishPadPosition);
-        }
-    
-        ArrayList<Position> agentsPositions = new ArrayList<Position>();
-        for (int i = 0; i < numberOfAgents; i++) {
-            Position agentPosition = HelperMethods.genrateRandomPosition(m, n, taken);
-            agentsPositions.add(agentPosition);
-            taken.add(agentPosition);
-        }
-    
-        // Encoding the grid in a string
-        String grid = "";
-        grid += m + "," + n + ";" + c + ";";
-        grid += neoPosition.x + "," + neoPosition.y + ";";
-        grid += telephoneBoothPosition.x + "," + telephoneBoothPosition.y + ";";
-        for (int i = 0; i < agentsPositions.size(); i++) {
-            grid += agentsPositions.get(i).x + "," + agentsPositions.get(i).y;
-            grid += i == agentsPositions.size()-1 ? ";" : ",";
-        }
-        for (int i = 0; i < pillsPositions.size(); i++) {
-            grid += pillsPositions.get(i).x + "," + pillsPositions.get(i).y;
-            grid += i == pillsPositions.size()-1 ? ";" : ",";
-        }
-        for (int i = 0; i < startPadsPositions.size(); i++) {
-            grid += startPadsPositions.get(i).x + "," + startPadsPositions.get(i).y + ",";
-            grid += finishPadsPositions.get(i).x + "," + finishPadsPositions.get(i).y + ",";
-            grid += finishPadsPositions.get(i).x + "," + finishPadsPositions.get(i).y + ",";
-            grid += startPadsPositions.get(i).x + "," + startPadsPositions.get(i).y;
-            grid += i == startPadsPositions.size()-1 ? ";" : ",";
-        }
-        for (int i = 0; i < hostagesPositions.size(); i++) {
-            grid += hostagesPositions.get(i).x + "," + hostagesPositions.get(i).y + ",";
-            grid += hostagesDamages.get(i);
-            grid += i == hostagesPositions.size()-1 ? "" : ",";
-        }
-    
-        return grid;
-    }
-
-    public static String solve(String initialGrid, String startegy, boolean visualize) {
-        Matrix matrix = new Matrix(initialGrid);
-        if (visualize) {
-            System.out.println(matrix.initialState);
-        }
-        return "";
     }
     
     @Override
@@ -362,4 +262,104 @@ public class Matrix extends SearchProblem {
         return 0;
     }
 
+    public static String genGrid() {
+        // Generate grid size
+        int m = HelperMethods.genrateRandomInt(5, 16);
+        int n = HelperMethods.genrateRandomInt(5, 16);
+    
+        // Generate number of hostages, pills, pads and agents
+        int numberOfAvailablePositions = m * n;
+        numberOfAvailablePositions -= 2;
+        int numberOfHostages = HelperMethods.genrateRandomInt(3, 11);
+        numberOfAvailablePositions -= numberOfHostages;
+        int numberOfPills = HelperMethods.genrateRandomInt(1, numberOfHostages+1);
+        numberOfAvailablePositions -= numberOfPills;
+        int numberOfPads = HelperMethods.genrateRandomInt(1, (int) Math.ceil(numberOfAvailablePositions/2.0));
+        numberOfAvailablePositions -= numberOfPads * 2;
+        int numberOfAgents = HelperMethods.genrateRandomInt(1, numberOfAvailablePositions+1);
+        numberOfAvailablePositions -= numberOfAgents;
+    
+        // Generate maximum number of hostages that can be carried
+        int c = HelperMethods.genrateRandomInt(1, 5);
+    
+        // Populate grid
+        ArrayList<Position> taken = new ArrayList<Position>();
+    
+        Position neoPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+        taken.add(neoPosition);
+    
+        Position telephoneBoothPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+        taken.add(telephoneBoothPosition);
+    
+        ArrayList<Position> hostagesPositions = new ArrayList<Position>();
+        ArrayList<Integer> hostagesDamages = new ArrayList<Integer>();
+        for (int i = 0; i < numberOfHostages; i++) {
+            Position hostagePosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            hostagesPositions.add(hostagePosition);
+            taken.add(hostagePosition);
+            hostagesDamages.add(HelperMethods.genrateRandomInt(1, 100));
+        }
+    
+        ArrayList<Position> pillsPositions = new ArrayList<Position>();
+        for (int i = 0; i < numberOfPills; i++) {
+            Position pillPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            pillsPositions.add(pillPosition);
+            taken.add(pillPosition);
+        }
+    
+        ArrayList<Position> startPadsPositions = new ArrayList<Position>();
+        ArrayList<Position> finishPadsPositions = new ArrayList<Position>();
+        for (int i = 0; i < numberOfPads; i++) {
+            Position startPadPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            taken.add(startPadPosition);
+            startPadsPositions.add(startPadPosition);
+            Position finishPadPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            taken.add(finishPadPosition);
+            finishPadsPositions.add(finishPadPosition);
+        }
+    
+        ArrayList<Position> agentsPositions = new ArrayList<Position>();
+        for (int i = 0; i < numberOfAgents; i++) {
+            Position agentPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            agentsPositions.add(agentPosition);
+            taken.add(agentPosition);
+        }
+    
+        // Encoding the grid in a string
+        String grid = "";
+        grid += m + "," + n + ";" + c + ";";
+        grid += neoPosition.x + "," + neoPosition.y + ";";
+        grid += telephoneBoothPosition.x + "," + telephoneBoothPosition.y + ";";
+        for (int i = 0; i < agentsPositions.size(); i++) {
+            grid += agentsPositions.get(i).x + "," + agentsPositions.get(i).y;
+            grid += i == agentsPositions.size()-1 ? ";" : ",";
+        }
+        for (int i = 0; i < pillsPositions.size(); i++) {
+            grid += pillsPositions.get(i).x + "," + pillsPositions.get(i).y;
+            grid += i == pillsPositions.size()-1 ? ";" : ",";
+        }
+        for (int i = 0; i < startPadsPositions.size(); i++) {
+            grid += startPadsPositions.get(i).x + "," + startPadsPositions.get(i).y + ",";
+            grid += finishPadsPositions.get(i).x + "," + finishPadsPositions.get(i).y + ",";
+            grid += finishPadsPositions.get(i).x + "," + finishPadsPositions.get(i).y + ",";
+            grid += startPadsPositions.get(i).x + "," + startPadsPositions.get(i).y;
+            grid += i == startPadsPositions.size()-1 ? ";" : ",";
+        }
+        for (int i = 0; i < hostagesPositions.size(); i++) {
+            grid += hostagesPositions.get(i).x + "," + hostagesPositions.get(i).y + ",";
+            grid += hostagesDamages.get(i);
+            grid += i == hostagesPositions.size()-1 ? "" : ",";
+        }
+    
+        return grid;
+    }
+
+    public static String solve(String initialGrid, String startegy, boolean visualize) {
+        Matrix matrix = new Matrix(initialGrid);
+        if (visualize) {
+            System.out.println(matrix.initialState);
+        }
+        return "";
+    }
+    
 }
