@@ -15,15 +15,15 @@ public class Matrix extends SearchProblem {
 
         // Create and populate the array of opeators
         this.operators = new ArrayList<Operator>(9);
-        this.operators.add(MatrixOperator.DROP);
-        this.operators.add(MatrixOperator.CARRY);
-        this.operators.add(MatrixOperator.TAKEPILL);
-        this.operators.add(MatrixOperator.KILL);
-        this.operators.add(MatrixOperator.FLY);
         this.operators.add(MatrixOperator.UP);
         this.operators.add(MatrixOperator.DOWN);
         this.operators.add(MatrixOperator.LEFT);
         this.operators.add(MatrixOperator.RIGHT);
+        this.operators.add(MatrixOperator.CARRY);
+        this.operators.add(MatrixOperator.DROP);
+        this.operators.add(MatrixOperator.TAKEPILL);
+        this.operators.add(MatrixOperator.FLY);
+        this.operators.add(MatrixOperator.KILL);
         
         // Split the state info from the genGrid output
         String[] splitState = initialGrid.split(";");
