@@ -2,12 +2,16 @@ package code.matrix.general;
 
 import java.util.ArrayList;
 import code.searchproblem.general.*;
+import code.searchproblem.strategies.SearchStrategy;
+import code.matrix.evaluationfunctions.*;
 import code.matrix.helpers.*;
 import code.matrix.objects.*;
 
 public class Matrix extends SearchProblem {
 
     public Matrix(String initialGrid) {
+        this.stateClassName = "code.matrix.general.MatrixState";
+
         // Create and populate the array of opeators
         this.operators = new ArrayList<Operator>(9);
         this.operators.add(MatrixOperator.UP);
@@ -354,12 +358,62 @@ public class Matrix extends SearchProblem {
         return grid;
     }
 
-    public static String solve(String initialGrid, String startegy, boolean visualize) {
+    public static String solve(String initialGrid, String strategy, boolean visualize) {
         Matrix matrix = new Matrix(initialGrid);
+        
         if (visualize) {
             System.out.println(matrix.initialState);
         }
-        return "";
+        
+        SearchTreeNode goalNode = null;
+        switch (strategy) {
+            case "BF": {
+                goalNode = SearchStrategy.breadthFirstSearch(matrix);
+                break;
+            }
+            case "DF": {
+                goalNode = SearchStrategy.depthFirstSearch(matrix);
+                break;
+            }
+            case "ID": {
+                goalNode = SearchStrategy.iterativeDeepeningSearch(matrix);
+                break;
+            }
+            case "UC": {
+                goalNode = SearchStrategy.uniformCostSearch(matrix);
+                break;
+            }
+            case "GR1": {
+                goalNode = SearchStrategy.bestFirstSearch(matrix, new MatrixGreedy1());
+                break;
+            }
+            case "GR2": {
+                goalNode = SearchStrategy.bestFirstSearch(matrix, new MatrixGreedy2());
+                break;
+            }
+            case "AS1": {
+                goalNode = SearchStrategy.bestFirstSearch(matrix, new MatrixAStar1());
+                break;
+            }
+            case "AS2": {
+                goalNode = SearchStrategy.bestFirstSearch(matrix, new MatrixAStar2());
+                break;
+            }
+            default:
+                break;
+        }
+        
+        if (goalNode == null)
+            return "No solution";
+        
+        SearchTreeNode currentNode = goalNode;
+        String result = "";
+        while (currentNode.parent != null) {
+            result = currentNode.operator.toString().toLowerCase() + result;
+            currentNode = currentNode.parent;
+            result = (currentNode.parent == null? "": ",") + result;
+        }
+        return result;
     }
     
 }

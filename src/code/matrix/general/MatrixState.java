@@ -115,19 +115,6 @@ public class MatrixState extends State {
     @Override
     public void updateState(Operator operator) {
         MatrixOperator matrixOperator = (MatrixOperator) operator;
-        
-        for (Hostage hostage : hostages) {
-            if (!hostage.position.equals(telephoneBooth.position) || hostage.isCarried) {
-                hostage.damage += 2;
-                if (hostage.damage >= 100 && matrixOperator != MatrixOperator.TAKEPILL) {
-                    hostage.damage = 100;
-                    if (!hostage.isCarried) {
-                        hostage.isAgent = true;
-                    }
-                }
-            }
-        }
-
         switch (matrixOperator) {
             case UP: {
                 neo.position.x--;
@@ -258,6 +245,18 @@ public class MatrixState extends State {
             }
             default:
                 break;
+        }
+
+        for (Hostage hostage : hostages) {
+            if (!hostage.position.equals(telephoneBooth.position) || hostage.isCarried) {
+                hostage.damage += 2;
+                if (hostage.damage >= 100) {
+                    hostage.damage = 100;
+                    if (!hostage.isCarried) {
+                        hostage.isAgent = true;
+                    }
+                }
+            }
         }
     }
     

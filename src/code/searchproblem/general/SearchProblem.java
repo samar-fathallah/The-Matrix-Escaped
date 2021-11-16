@@ -1,10 +1,10 @@
 package code.searchproblem.general;
 
 import java.util.ArrayList;
-import code.searchproblem.strategies.SearchStrategy;
 
 public abstract class SearchProblem {
 
+    public String stateClassName;
     public ArrayList<Operator> operators;
     public State initialState;
     
@@ -14,9 +14,5 @@ public abstract class SearchProblem {
     public abstract boolean goalTest(State state);
     
     public abstract int pathCost(SearchTreeNode node);
-
-    public static SearchTreeNode generalSearch(SearchProblem problem, SearchStrategy strategy) {
-        return null;
-    }
 
 }

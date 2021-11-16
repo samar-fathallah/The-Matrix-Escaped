@@ -7,6 +7,7 @@ public class SearchTreeNode {
     public Operator operator;
     public int depth;
     public int pathCost;
+    public int fValue;
 
     // Constructor For Root Node Creation
     public SearchTreeNode(String state) {
@@ -18,12 +19,11 @@ public class SearchTreeNode {
     }
     
     // Constructor For Other Nodes
-    public SearchTreeNode(String state, SearchTreeNode parent, Operator operator, int pathCost) {
+    public SearchTreeNode(String state, SearchTreeNode parent, Operator operator) {
         this.state = state;
         this.parent = parent;
         this.operator = operator;
         this.depth = parent.depth + 1;
-        this.pathCost = pathCost;
     }
 }
 
