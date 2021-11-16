@@ -2,6 +2,7 @@ package code.matrix.general;
 
 import java.util.ArrayList;
 import code.searchproblem.general.*;
+import code.matrix.helpers.Position;
 import code.matrix.objects.*;
 
 public class MatrixState extends State {
@@ -110,6 +111,191 @@ public class MatrixState extends State {
         }
         
         return stateString;
+    }
+
+    @Override
+    public boolean isValidOperator(Operator operator) {
+        MatrixOperator matrixOperator = (MatrixOperator) operator;
+        boolean isValidOperator = true;
+        
+        switch (matrixOperator) {
+            case UP: {
+                Position neoPosition = this.neo.position;
+                if (neoPosition.x == 0) {
+                    isValidOperator = false;
+                }
+                else {
+                    Object object = this.grid[neoPosition.x - 1][neoPosition.y];
+                    if (object instanceof Agent) {
+                        isValidOperator = false;
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent || hostage.damage >= 98) {
+                            isValidOperator = false;
+                        }
+                    }
+                }
+                break;
+            }
+            case DOWN: {
+                Position neoPosition = this.neo.position;
+                if (neoPosition.x == this.n - 1) {
+                    isValidOperator = false;
+                }
+                else {
+                    Object object = this.grid[neoPosition.x + 1][neoPosition.y];
+                    if (object instanceof Agent) {
+                        isValidOperator = false;
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent || hostage.damage >= 98) {
+                            isValidOperator = false;
+                        }
+                    }
+                }
+                break;
+            } 
+            case LEFT: {
+                Position neoPosition = this.neo.position;
+                if (neoPosition.y == 0) {
+                    isValidOperator = false;
+                }
+                else {
+                    Object object = this.grid[neoPosition.x][neoPosition.y - 1];
+                    if (object instanceof Agent) {
+                        isValidOperator = false;
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent || hostage.damage >= 98) {
+                            isValidOperator = false;
+                        }
+                    }
+                }
+                break;
+            }
+            case RIGHT: {
+                Position neoPosition = this.neo.position;
+                if (neoPosition.y == this.m - 1) {
+                    isValidOperator = false;
+                }
+                else {
+                    Object object = this.grid[neoPosition.x][neoPosition.y + 1];
+                    if (object instanceof Agent) {
+                        isValidOperator = false;
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent || hostage.damage >= 98) {
+                            isValidOperator = false;
+                        }
+                    }
+                }
+                break;
+            }
+            case CARRY: {
+                Neo neo = this.neo;
+                Object object = this.grid[neo.position.x][neo.position.y];
+                if (!(object instanceof Hostage)) {
+                    isValidOperator = false;
+                }
+                else if (neo.carriedHostages.size() == neo.carryCapacity) {
+                    isValidOperator = false;
+                }
+                break;
+            }
+            case DROP: {
+                Neo neo = this.neo;
+                if (!neo.position.equals(this.telephoneBooth.position) || neo.carriedHostages.size() == 0) {
+                    isValidOperator = false;
+                }
+                break;
+            }
+            case TAKEPILL: {
+                Position neoPosition = this.neo.position;
+                Object object = this.grid[neoPosition.x][neoPosition.y];
+                if (!(object instanceof Pill)) {
+                    isValidOperator = false;
+                }
+                break;
+            }
+            case FLY: {
+                Position neoPosition = this.neo.position;
+                Object object = this.grid[neoPosition.x][neoPosition.y];
+                if (!(object instanceof Pad)) {
+                    isValidOperator = false;
+                }
+                break;
+            }
+            case KILL: {
+                if (neo.damage >= 80) {
+                    isValidOperator = false;
+                    break;
+                }
+                Position neoPosition = this.neo.position;
+                // current cell
+                Object object = this.grid[neoPosition.x][neoPosition.y];
+                if (object instanceof Hostage) {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.damage >= 98) {
+                        isValidOperator = false;
+                        break;
+                    }
+                }
+                // above cell
+                object = neoPosition.x == 0 ? null : this.grid[neoPosition.x-1][neoPosition.y];
+                if (object instanceof Agent) {
+                    break;
+                }
+                else if (object instanceof Hostage) {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.isAgent) {
+                        break;
+                    }
+                }
+                // below cell
+                object = neoPosition.x == this.n-1 ? null : this.grid[neoPosition.x+1][neoPosition.y];
+                if (object instanceof Agent) {
+                    break;
+                }
+                else if (object instanceof Hostage) {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.isAgent) {
+                        break;
+                    }
+                }
+                // left cell
+                object = neoPosition.y == 0 ? null : this.grid[neoPosition.x][neoPosition.y-1];
+                if (object instanceof Agent) {
+                    break;
+                }
+                else if (object instanceof Hostage) {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.isAgent) {
+                        break;
+                    }
+                }
+                // right cell
+                object = neoPosition.y == this.m-1 ? null : this.grid[neoPosition.x][neoPosition.y+1];
+                if (object instanceof Agent) {
+                    break;
+                }
+                else if (object instanceof Hostage) {
+                    Hostage hostage = (Hostage) object;
+                    if (hostage.isAgent) {
+                        break;
+                    }
+                }
+                isValidOperator = false;
+                break;
+            }
+            default:
+                break;
+        }
+
+        return isValidOperator;
     }
 
     @Override

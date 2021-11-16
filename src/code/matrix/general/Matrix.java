@@ -15,15 +15,15 @@ public class Matrix extends SearchProblem {
 
         // Create and populate the array of opeators
         this.operators = new ArrayList<Operator>(9);
+        this.operators.add(MatrixOperator.DROP);
+        this.operators.add(MatrixOperator.CARRY);
+        this.operators.add(MatrixOperator.TAKEPILL);
+        this.operators.add(MatrixOperator.KILL);
+        this.operators.add(MatrixOperator.FLY);
         this.operators.add(MatrixOperator.UP);
         this.operators.add(MatrixOperator.DOWN);
         this.operators.add(MatrixOperator.LEFT);
         this.operators.add(MatrixOperator.RIGHT);
-        this.operators.add(MatrixOperator.CARRY);
-        this.operators.add(MatrixOperator.DROP);
-        this.operators.add(MatrixOperator.TAKEPILL);
-        this.operators.add(MatrixOperator.FLY);
-        this.operators.add(MatrixOperator.KILL);
         
         // Split the state info from the genGrid output
         String[] splitState = initialGrid.split(";");
@@ -68,198 +68,28 @@ public class Matrix extends SearchProblem {
             return null;
         }
 
-        boolean isValidOperator = true;
-        switch (matrixOperator) {
-            case UP: {
-                Position neoPosition = matrixState.neo.position;
-                if (neoPosition.x == 0) {
-                    isValidOperator = false;
-                }
-                else {
-                    Object object = matrixState.grid[neoPosition.x - 1][neoPosition.y];
-                    if (object instanceof Agent) {
-                        isValidOperator = false;
-                    }
-                    else if (object instanceof Hostage) {
-                        Hostage hostage = (Hostage) object;
-                        if (hostage.isAgent) {
-                            isValidOperator = false;
-                        }
-                    }
-                }
-                break;
-            }
-            case DOWN: {
-                Position neoPosition = matrixState.neo.position;
-                if (neoPosition.x == matrixState.n - 1) {
-                    isValidOperator = false;
-                }
-                else {
-                    Object object = matrixState.grid[neoPosition.x + 1][neoPosition.y];
-                    if (object instanceof Agent) {
-                        isValidOperator = false;
-                    }
-                    else if (object instanceof Hostage) {
-                        Hostage hostage = (Hostage) object;
-                        if (hostage.isAgent) {
-                            isValidOperator = false;
-                        }
-                    }
-                }
-                break;
-            } 
-            case LEFT: {
-                Position neoPosition = matrixState.neo.position;
-                if (neoPosition.y == 0) {
-                    isValidOperator = false;
-                }
-                else {
-                    Object object = matrixState.grid[neoPosition.x][neoPosition.y - 1];
-                    if (object instanceof Agent) {
-                        isValidOperator = false;
-                    }
-                    else if (object instanceof Hostage) {
-                        Hostage hostage = (Hostage) object;
-                        if (hostage.isAgent) {
-                            isValidOperator = false;
-                        }
-                    }
-                }
-                break;
-            }
-            case RIGHT: {
-                Position neoPosition = matrixState.neo.position;
-                if (neoPosition.y == matrixState.m - 1) {
-                    isValidOperator = false;
-                }
-                else {
-                    Object object = matrixState.grid[neoPosition.x][neoPosition.y + 1];
-                    if (object instanceof Agent) {
-                        isValidOperator = false;
-                    }
-                    else if (object instanceof Hostage) {
-                        Hostage hostage = (Hostage) object;
-                        if (hostage.isAgent) {
-                            isValidOperator = false;
-                        }
-                    }
-                }
-                break;
-            }
-            case CARRY: {
-                Neo neo = matrixState.neo;
-                Object object = matrixState.grid[neo.position.x][neo.position.y];
-                if (!(object instanceof Hostage)) {
-                    isValidOperator = false;
-                }
-                else if (neo.carriedHostages.size() == neo.carryCapacity) {
-                    isValidOperator = false;
-                }
-                break;
-            }
-            case DROP: {
-                Neo neo = matrixState.neo;
-                if (!neo.position.equals(matrixState.telephoneBooth.position) || neo.carriedHostages.size() == 0) {
-                    isValidOperator = false;
-                }
-                break;
-            }
-            case TAKEPILL: {
-                Position neoPosition = matrixState.neo.position;
-                Object object = matrixState.grid[neoPosition.x][neoPosition.y];
-                if (!(object instanceof Pill)) {
-                    isValidOperator = false;
-                }
-                break;
-            }
-            case FLY: {
-                Position neoPosition = matrixState.neo.position;
-                Object object = matrixState.grid[neoPosition.x][neoPosition.y];
-                if (!(object instanceof Pad)) {
-                    isValidOperator = false;
-                }
-                break;
-            }
-            case KILL: {
-                Position neoPosition = matrixState.neo.position;
-                // above cell
-                Object object = neoPosition.x == 0 ? null : matrixState.grid[neoPosition.x-1][neoPosition.y];
-                if (object instanceof Agent) {
-                    break;
-                }
-                else if (object instanceof Hostage) {
-                    Hostage hostage = (Hostage) object;
-                    if (hostage.isAgent) {
-                        break;
-                    }
-                }
-                // below cell
-                object = neoPosition.x == matrixState.n-1 ? null : matrixState.grid[neoPosition.x+1][neoPosition.y];
-                if (object instanceof Agent) {
-                    break;
-                }
-                else if (object instanceof Hostage) {
-                    Hostage hostage = (Hostage) object;
-                    if (hostage.isAgent) {
-                        break;
-                    }
-                }
-                // left cell
-                object = neoPosition.y == 0 ? null : matrixState.grid[neoPosition.x][neoPosition.y-1];
-                if (object instanceof Agent) {
-                    break;
-                }
-                else if (object instanceof Hostage) {
-                    Hostage hostage = (Hostage) object;
-                    if (hostage.isAgent) {
-                        break;
-                    }
-                }
-                // right cell
-                object = neoPosition.y == matrixState.m-1 ? null : matrixState.grid[neoPosition.x][neoPosition.y+1];
-                if (object instanceof Agent) {
-                    break;
-                }
-                else if (object instanceof Hostage) {
-                    Hostage hostage = (Hostage) object;
-                    if (hostage.isAgent) {
-                        break;
-                    }
-                }
-                isValidOperator = false;
-                break;
-            }
-            default:
-                break;
-        }
-
-        if (!isValidOperator) {
-            return null;
+        if (matrixState.isValidOperator(operator)) {
+            State nextState = matrixState.clone();
+            nextState.updateState(matrixOperator);
+            return nextState;
         }
         
-        State nextState = matrixState.clone();
-        nextState.updateState(matrixOperator);
-        return nextState;
+         return null;
     }
 
     @Override
     public boolean goalTest(State state) {
         MatrixState matrixState = (MatrixState) state;
-        boolean neoIsKilled = matrixState.neo.damage >= 100;
         boolean neoAtBooth = matrixState.neo.position.equals(matrixState.telephoneBooth.position);
         boolean hostagesDisappeared = true;
         for (Hostage hostage : matrixState.hostages) {
-            if (!hostage.position.equals(matrixState.telephoneBooth.position)) {
-                if (!hostage.isKilled)
-                    hostagesDisappeared = false;
-                    break;
-            }
-            else if (hostage.isCarried) {
+            if ((hostage.isAgent && !hostage.isKilled)
+                || (!hostage.position.equals(matrixState.telephoneBooth.position) || hostage.isCarried)) {
                 hostagesDisappeared = false;
                 break;
             }
         }
-        return !neoIsKilled && neoAtBooth && hostagesDisappeared;
+        return neoAtBooth && hostagesDisappeared;
     }
     
     @Override
@@ -402,7 +232,7 @@ public class Matrix extends SearchProblem {
         }
         
         if (goalNode == null)
-            return "No solution";
+            return "NoSolution;0;0;" + matrix.expandedNodes;
         
         SearchTreeNode currentNode = goalNode;
         String plan = "";
