@@ -260,4 +260,28 @@ public class MatrixState extends State {
         }
     }
     
+    public int getDeaths() {
+        int deaths = 0;
+        for (Hostage hostage : hostages) {
+            if (hostage.damage == 100) {
+                deaths++;
+            }
+        }
+        return deaths;
+    }
+
+    public int getKills() {
+        int kills = 0;
+        for (Agent agent : agents) {
+            if (agent.isKilled) {
+                kills++;
+            }
+        }
+        for (Hostage hostage : hostages) {
+            if (hostage.isKilled) {
+                kills++;
+            }
+        }
+        return kills;
+    }
 }

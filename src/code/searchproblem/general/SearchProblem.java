@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public abstract class SearchProblem {
 
     public String stateClassName;
+    public int expandedNodes;
     public ArrayList<Operator> operators;
     public State initialState;
     

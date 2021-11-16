@@ -2,6 +2,7 @@ package code.searchproblem.strategies;
 
 import java.lang.Class;
 import java.lang.reflect.Constructor;
+import java.util.HashSet;
 import java.util.LinkedList;
 import code.searchproblem.general.*;
 import code.searchproblem.strategies.queueingfunctions.*;
@@ -10,8 +11,13 @@ public class SearchStrategy {
     
     public static SearchTreeNode generalSearch(SearchProblem problem, QueueingFunction queueingFunction) {
         LinkedList<SearchTreeNode> queue = new LinkedList<SearchTreeNode>();
-        queue.add(new SearchTreeNode(problem.initialState.encode()));
+        HashSet<String> visitedStates = new HashSet<String>();
+        String initialStateString = problem.initialState.encode();
+        queue.add(new SearchTreeNode(initialStateString));
+        visitedStates.add(initialStateString);
+
         while (!queue.isEmpty()) {
+            problem.expandedNodes++;
             SearchTreeNode currentNode = queue.removeFirst();
             State currentState;
             try {
@@ -30,9 +36,13 @@ public class SearchStrategy {
             for (Operator operator : problem.operators) {
                 State nextState = problem.getNextState(currentState, operator);
                 if (nextState != null) {
-                    SearchTreeNode nextNode = new SearchTreeNode(nextState.encode(), currentNode, operator);
-                    nextNode.pathCost = problem.pathCost(nextNode);
-                    queueingFunction.enqueue(queue, nextNode);
+                    String nextStateString = nextState.encode();
+                    if (!visitedStates.contains(nextStateString)) {
+                        visitedStates.add(nextStateString);
+                        SearchTreeNode nextNode = new SearchTreeNode(nextStateString, currentNode, operator);
+                        nextNode.pathCost = problem.pathCost(nextNode);
+                        queueingFunction.enqueue(queue, nextNode);
+                    }
                 }
             }
         }

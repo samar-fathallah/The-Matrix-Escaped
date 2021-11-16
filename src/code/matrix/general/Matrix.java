@@ -11,6 +11,7 @@ public class Matrix extends SearchProblem {
 
     public Matrix(String initialGrid) {
         this.stateClassName = "code.matrix.general.MatrixState";
+        this.expandedNodes = 0;
 
         // Create and populate the array of opeators
         this.operators = new ArrayList<Operator>(9);
@@ -244,6 +245,7 @@ public class Matrix extends SearchProblem {
     @Override
     public boolean goalTest(State state) {
         MatrixState matrixState = (MatrixState) state;
+        boolean neoIsKilled = matrixState.neo.damage >= 100;
         boolean neoAtBooth = matrixState.neo.position.equals(matrixState.telephoneBooth.position);
         boolean hostagesDisappeared = true;
         for (Hostage hostage : matrixState.hostages) {
@@ -257,7 +259,7 @@ public class Matrix extends SearchProblem {
                 break;
             }
         }
-        return neoAtBooth && hostagesDisappeared;
+        return !neoIsKilled && neoAtBooth && hostagesDisappeared;
     }
     
     @Override
@@ -361,10 +363,6 @@ public class Matrix extends SearchProblem {
     public static String solve(String initialGrid, String strategy, boolean visualize) {
         Matrix matrix = new Matrix(initialGrid);
         
-        if (visualize) {
-            System.out.println(matrix.initialState);
-        }
-        
         SearchTreeNode goalNode = null;
         switch (strategy) {
             case "BF": {
@@ -407,13 +405,19 @@ public class Matrix extends SearchProblem {
             return "No solution";
         
         SearchTreeNode currentNode = goalNode;
-        String result = "";
+        String plan = "";
         while (currentNode.parent != null) {
-            result = currentNode.operator.toString().toLowerCase() + result;
+            plan = currentNode.operator.toString().toLowerCase() + plan;
             currentNode = currentNode.parent;
-            result = (currentNode.parent == null? "": ",") + result;
+            plan = (currentNode.parent == null? "": ",") + plan;
         }
-        return result;
+
+        if (visualize) {
+            System.out.println(matrix.initialState);
+        }
+
+        MatrixState goalState = new MatrixState(goalNode.state);
+        return plan + ";" + goalState.getDeaths() + ";" + goalState.getKills() + ";" + matrix.expandedNodes;
     }
     
 }
