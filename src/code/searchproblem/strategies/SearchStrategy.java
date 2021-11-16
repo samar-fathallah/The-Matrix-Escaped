@@ -10,18 +10,26 @@ import code.searchproblem.strategies.queueingfunctions.*;
 public class SearchStrategy {
     
     public static SearchTreeNode generalSearch(SearchProblem problem, QueueingFunction queueingFunction) {
+        Class<?> stateClass;
+        Constructor<?> constructor;
+        try {
+            stateClass = Class.forName(problem.stateClassName);
+            constructor = stateClass.getConstructor(String.class);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
         LinkedList<SearchTreeNode> queue = new LinkedList<SearchTreeNode>();
         HashSet<String> visitedStates = new HashSet<String>();
         queue.add(new SearchTreeNode(problem.initialState.encode()));
         visitedStates.add(problem.initialState.hash());
-
         while (!queue.isEmpty()) {
             problem.expandedNodes++;
             SearchTreeNode currentNode = queue.removeFirst();
             State currentState;
             try {
-                Class<?> stateClass = Class.forName(problem.stateClassName);
-                Constructor<?> constructor = stateClass.getConstructor(String.class);
                 currentState = (State) constructor.newInstance(currentNode.state);
             }
             catch (Exception e) {

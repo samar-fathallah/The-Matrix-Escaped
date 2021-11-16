@@ -114,8 +114,15 @@ public class MatrixState extends State {
     }
 
     @Override
-    public String hash(){
-        return this.encode();
+    public String hash() {
+        String stateString = this.encode();
+        String[] splitStateString = stateString.split(";");
+        String stateHash = "";
+        stateHash += splitStateString[2] + ";";
+        stateHash += splitStateString[4] + ";";
+        stateHash += splitStateString[5] + ";";
+        stateHash += splitStateString[7];
+        return stateHash;
     }
 
     @Override
