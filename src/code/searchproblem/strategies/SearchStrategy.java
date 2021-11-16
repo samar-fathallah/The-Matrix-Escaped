@@ -12,9 +12,8 @@ public class SearchStrategy {
     public static SearchTreeNode generalSearch(SearchProblem problem, QueueingFunction queueingFunction) {
         LinkedList<SearchTreeNode> queue = new LinkedList<SearchTreeNode>();
         HashSet<String> visitedStates = new HashSet<String>();
-        String initialStateString = problem.initialState.encode();
-        queue.add(new SearchTreeNode(initialStateString));
-        visitedStates.add(initialStateString);
+        queue.add(new SearchTreeNode(problem.initialState.encode()));
+        visitedStates.add(problem.initialState.hash());
 
         while (!queue.isEmpty()) {
             problem.expandedNodes++;
@@ -36,10 +35,10 @@ public class SearchStrategy {
             for (Operator operator : problem.operators) {
                 State nextState = problem.getNextState(currentState, operator);
                 if (nextState != null) {
-                    String nextStateString = nextState.encode();
-                    if (!visitedStates.contains(nextStateString)) {
-                        visitedStates.add(nextStateString);
-                        SearchTreeNode nextNode = new SearchTreeNode(nextStateString, currentNode, operator);
+                    String nextStateHash = nextState.hash();
+                    if (!visitedStates.contains(nextStateHash)) {
+                        visitedStates.add(nextStateHash);
+                        SearchTreeNode nextNode = new SearchTreeNode(nextState.encode(), currentNode, operator);
                         nextNode.pathCost = problem.pathCost(nextNode);
                         queueingFunction.enqueue(queue, nextNode);
                     }

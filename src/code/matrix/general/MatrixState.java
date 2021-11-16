@@ -114,6 +114,11 @@ public class MatrixState extends State {
     }
 
     @Override
+    public String hash(){
+        return this.encode();
+    }
+
+    @Override
     public boolean isValidOperator(Operator operator) {
         MatrixOperator matrixOperator = (MatrixOperator) operator;
         boolean isValidOperator = true;
