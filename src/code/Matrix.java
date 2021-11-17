@@ -240,7 +240,7 @@ public class Matrix extends SearchProblem {
         }
         
         if (goalNode == null)
-            return "NoSolution;0;0;" + matrix.expandedNodes;
+            return "No Solution";
         
         SearchTreeNode currentNode = goalNode;
         String plan = "";
