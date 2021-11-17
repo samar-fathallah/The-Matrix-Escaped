@@ -361,9 +361,12 @@ public class MatrixState extends State {
                 grid[neo.position.x][neo.position.y] = null;
                 pill.isTaken = true;
                 neo.damage -= 20;
+                if (neo.damage < 0) {
+                    neo.damage = 0;
+                }
                 for (Hostage hostage : hostages) {
-                    if (!hostage.isAgent && !(hostage.position.equals(telephoneBooth.position) && !hostage.isCarried)) {
-                        hostage.damage -= 22;
+                    if (!hostage.isAgent && (!hostage.position.equals(telephoneBooth.position) || hostage.isCarried)) {
+                        hostage.damage -= 20;
                         if (hostage.damage < 0) {
                             hostage.damage = 0;
                         }
@@ -445,13 +448,15 @@ public class MatrixState extends State {
                 break;
         }
 
-        for (Hostage hostage : hostages) {
-            if (!hostage.position.equals(telephoneBooth.position) || hostage.isCarried) {
-                hostage.damage += 2;
-                if (hostage.damage >= 100) {
-                    hostage.damage = 100;
-                    if (!hostage.isCarried) {
-                        hostage.isAgent = true;
+        if (matrixOperator != MatrixOperator.TAKEPILL) {
+            for (Hostage hostage : hostages) {
+                if (!hostage.isAgent && (!hostage.position.equals(telephoneBooth.position) || hostage.isCarried)) {
+                    hostage.damage += 2;
+                    if (hostage.damage >= 100) {
+                        hostage.damage = 100;
+                        if (!hostage.isCarried) {
+                            hostage.isAgent = true;
+                        }
                     }
                 }
             }
@@ -482,4 +487,5 @@ public class MatrixState extends State {
         }
         return kills;
     }
+    
 }
