@@ -1,6 +1,6 @@
 package tests;
 
-import code.matrix.general.*;
+import code.Matrix;
 
 public class App {
 

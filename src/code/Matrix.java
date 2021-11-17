@@ -1,9 +1,11 @@
-package code.matrix.general;
+package code;
 
 import java.util.ArrayList;
 import code.searchproblem.general.*;
 import code.searchproblem.strategies.SearchStrategy;
 import code.matrix.evaluationfunctions.*;
+import code.matrix.general.MatrixOperator;
+import code.matrix.general.MatrixState;
 import code.matrix.helpers.*;
 import code.matrix.objects.*;
 
