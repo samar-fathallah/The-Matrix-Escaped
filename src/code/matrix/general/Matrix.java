@@ -83,8 +83,13 @@ public class Matrix extends SearchProblem {
         boolean neoAtBooth = matrixState.neo.position.equals(matrixState.telephoneBooth.position);
         boolean hostagesDisappeared = true;
         for (Hostage hostage : matrixState.hostages) {
-            if ((hostage.isAgent && !hostage.isKilled)
-                || (!hostage.position.equals(matrixState.telephoneBooth.position) || hostage.isCarried)) {
+            if (hostage.isAgent) {
+                if (!hostage.isKilled) {
+                    hostagesDisappeared = false;
+                    break;
+                }
+            }
+            else if (!hostage.position.equals(matrixState.telephoneBooth.position) || hostage.isCarried) {
                 hostagesDisappeared = false;
                 break;
             }
