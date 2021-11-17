@@ -243,7 +243,11 @@ public class Matrix extends SearchProblem {
         SearchTreeNode currentNode = goalNode;
         String plan = "";
         while (currentNode.parent != null) {
-            plan = currentNode.operator.toString().toLowerCase() + plan;
+            String currentOperator = currentNode.operator.toString().toLowerCase();
+            if (currentOperator.equals("takepill")) {
+                currentOperator = "takePill";
+            }
+            plan = currentOperator + plan;
             currentNode = currentNode.parent;
             plan = (currentNode.parent == null? "": ",") + plan;
         }
