@@ -10,9 +10,6 @@ import code.matrix.objects.*;
 public class Matrix extends SearchProblem {
 
     public Matrix(String initialGrid) {
-        this.stateClassName = "code.matrix.general.MatrixState";
-        this.expandedNodes = 0;
-
         // Create and populate the array of opeators
         this.operators = new ArrayList<Operator>(9);
         this.operators.add(MatrixOperator.UP);
@@ -57,6 +54,10 @@ public class Matrix extends SearchProblem {
 
         // Create the initial state object
         this.initialState = new MatrixState(initialStateString);
+
+        // Set the name of the state class and the number of expanded nodes
+        this.stateClassName = this.initialState.getClass().getName();
+        this.expandedNodes = 0;
     }
     
     @Override
