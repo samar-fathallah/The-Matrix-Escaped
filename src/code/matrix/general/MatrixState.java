@@ -472,6 +472,15 @@ public class MatrixState extends State {
         }
         return deaths;
     }
+    public int getAgentKills(){
+        int kills = 0;
+        for (Agent agent : agents) {
+            if (agent.isKilled) {
+                kills++;
+            }
+        }
+        return kills;
+    }
 
     public int getKills() {
         int kills = 0;
