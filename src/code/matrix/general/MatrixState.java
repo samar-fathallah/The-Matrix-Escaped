@@ -472,7 +472,8 @@ public class MatrixState extends State {
         }
         return deaths;
     }
-    public int getAgentKills(){
+    
+    public int getAgentKills() {
         int kills = 0;
         for (Agent agent : agents) {
             if (agent.isKilled) {
@@ -482,18 +483,20 @@ public class MatrixState extends State {
         return kills;
     }
 
-    public int getKills() {
+    public int getHostageKills() {
         int kills = 0;
-        for (Agent agent : agents) {
-            if (agent.isKilled) {
-                kills++;
-            }
-        }
         for (Hostage hostage : hostages) {
             if (hostage.isKilled) {
                 kills++;
             }
         }
+        return kills;
+    }
+
+    public int getKills() {
+        int kills = 0;
+        kills += this.getAgentKills();
+        kills += this.getHostageKills();
         return kills;
     }
     
