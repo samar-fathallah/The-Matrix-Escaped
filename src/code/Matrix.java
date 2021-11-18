@@ -1,6 +1,8 @@
 package code;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+
 import code.searchproblem.general.*;
 import code.searchproblem.strategies.SearchStrategy;
 import code.matrix.evaluationfunctions.*;
@@ -250,8 +252,11 @@ public class Matrix extends SearchProblem {
         
         SearchTreeNode currentNode = goalNode;
         String plan = "";
+        LinkedList<String> gridVisualize=new LinkedList<String>();
         while (currentNode.parent != null) {
             String currentOperator = currentNode.operator.toString().toLowerCase();
+            MatrixState currentState=new MatrixState(currentNode.state);
+            gridVisualize.addFirst(currentState.toString());
             if (currentOperator.equals("takepill")) {
                 currentOperator = "takePill";
             }
@@ -259,9 +264,16 @@ public class Matrix extends SearchProblem {
             currentNode = currentNode.parent;
             plan = (currentNode.parent == null? "": ",") + plan;
         }
+        MatrixState currentState=new MatrixState(currentNode.state);
+        gridVisualize.addFirst(currentState.toString());
 
         if (visualize) {
-            System.out.println(matrix.initialState);
+           for (String currenString : gridVisualize) {
+               System.out.println(currenString);
+               System.out.println("_________________________________________________________________________"+"\n");
+               
+               
+           }
         }
 
         MatrixState goalState = new MatrixState(goalNode.state);

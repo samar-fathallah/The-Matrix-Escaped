@@ -64,10 +64,72 @@ public class MatrixState extends State {
         for (int i = 0; i < grid.length; i++) {
             result += "[  ";
             for (int j = 0; j < grid[0].length; j++) {
-                result +=  (grid[i][j] != null ? grid[i][j].toString().split("@")[0].substring(20, 22) : "NA") + "  ";
+                boolean neoAdded=false;
+                Object object=grid[i][j];
+                if(i==this.neo.position.x && j==this.neo.position.y){
+                    neoAdded=true;
+                    if(object==null){  
+                        result+="   N    ";
+                    }  
+                    else{
+                       result+="N,"; 
+                    }      
+                }
+                if(object!=null){
+                   if(!neoAdded){
+                       result+=" ";
+                   }
+                    if(object instanceof Pill){
+                        result+="  Pi  ";
+                    }
+                    else if(object instanceof Pad){
+                        result+="  Pa  ";
+                    }
+                    else if(object instanceof Hostage){
+                        Hostage hostage=(Hostage)object;
+                        if(hostage.isAgent){
+                            result+="H (Ag)";
+                        }
+                        else{
+                            if(hostage.damage<10){
+                                result+="H  ("+hostage.damage+")";
+                            }
+                            else{
+                                result+="H ("+hostage.damage+")";
+                            }            
+                        }
+            
+                    }
+                    else if(object instanceof Agent){
+                        result+="  Ag  ";
+                    }
+                    else if (object instanceof TelephoneBooth){
+                        result+="  TB  ";
+                    }
+                    if(!neoAdded){
+                        result+=" ";
+                    }
+                }
+                else if(!(i==this.neo.position.x && j==this.neo.position.y)){
+                   result+="   --   "; 
+                }
+
+               result+=j==grid[0].length-1?"  ":" | ";
             }
+            
             result += "]" + "\n";
         }
+        result+="\n"+"Neo Damage: "+this.neo.damage;
+        result+="\n"+"Carried Hostages: ";
+        if(this.neo.carriedHostages.size()==0){
+            result+="No Hostages";
+        }
+        else{
+        for (Hostage hostage : this.neo.carriedHostages) {
+            result+="H("+hostage.damage+") ";
+
+        }
+    }
         return result;
     }
 
