@@ -62,74 +62,83 @@ public class MatrixState extends State {
         String result = "";
         Object[][] grid = this.grid;
         for (int i = 0; i < grid.length; i++) {
-            result += "[  ";
+            result += "[ ";
             for (int j = 0; j < grid[0].length; j++) {
-                boolean neoAdded=false;
-                Object object=grid[i][j];
-                if(i==this.neo.position.x && j==this.neo.position.y){
-                    neoAdded=true;
-                    if(object==null){  
-                        result+="   N    ";
-                    }  
-                    else{
-                       result+="N,"; 
-                    }      
+                boolean neoAdded = false;
+                Object object = grid[i][j];
+                if (i == this.neo.position.x && j == this.neo.position.y) {
+                    neoAdded = true;
+                    if (object == null) {
+                        result += "     N      ";
+                    }
+                    else {
+                        result += "N,";
+                    }
                 }
-                if(object!=null){
-                   if(!neoAdded){
-                       result+=" ";
-                   }
-                    if(object instanceof Pill){
-                        result+="  Pi  ";
+                if (object != null) {
+                    if (!neoAdded) {
+                        result += " ";
                     }
-                    else if(object instanceof Pad){
-                        result+="  Pa  ";
+
+                    if (object instanceof TelephoneBooth) {
+                        result += "    TB    ";
                     }
-                    else if(object instanceof Hostage){
-                        Hostage hostage=(Hostage)object;
-                        if(hostage.isAgent){
-                            result+="H (Ag)";
+                    else if (object instanceof Agent) {
+                        result += "    Ag    ";
+                    }
+                    if (object instanceof Pill) {
+                        result += "    Pi    ";
+                    }
+                    else if (object instanceof Pad) {
+                        Pad pad = (Pad) object;
+                        if (pad.finish.x < 10 && pad.finish.y < 10) {
+                            result += " Pa (" + pad.finish.x + "," + pad.finish.y + ") ";
                         }
-                        else{
-                            if(hostage.damage<10){
-                                result+="H  ("+hostage.damage+")";
+                        else if (pad.finish.x >= 10 && pad.finish.y >= 10) {
+                            result += "Pa (" + pad.finish.x + "," + pad.finish.y + ")";
+                        }
+                        else {
+                            result += " Pa (" + pad.finish.x + "," + pad.finish.y + ")";
+                        }
+                        
+                    }
+                    else if (object instanceof Hostage) {
+                        Hostage hostage = (Hostage) object;
+                        if (hostage.isAgent) {
+                            result += "  H (Ag)  ";
+                        }
+                        else {
+                            if (hostage.damage < 10) {
+                                result += "  H  (" + hostage.damage + ")  ";
                             }
-                            else{
-                                result+="H ("+hostage.damage+")";
-                            }            
+                            else {
+                                result += "  H (" + hostage.damage + ")  ";
+                            }
                         }
-            
-                    }
-                    else if(object instanceof Agent){
-                        result+="  Ag  ";
-                    }
-                    else if (object instanceof TelephoneBooth){
-                        result+="  TB  ";
-                    }
-                    if(!neoAdded){
-                        result+=" ";
-                    }
-                }
-                else if(!(i==this.neo.position.x && j==this.neo.position.y)){
-                   result+="   --   "; 
-                }
 
-               result+=j==grid[0].length-1?"  ":" | ";
+                    }
+                    
+                    if (!neoAdded) {
+                        result += " ";
+                    }
+                }
+                else if (!(i == this.neo.position.x && j == this.neo.position.y)) {
+                    result += "     --     ";
+                }
+                result += (j == grid[0].length-1) ? "" : " | ";
             }
-            
-            result += "]" + "\n";
+            result += " ]" + "\n";
         }
-        result+="\n"+"Neo Damage: "+this.neo.damage;
-        result+="\n"+"Carried Hostages: ";
-        if(this.neo.carriedHostages.size()==0){
-            result+="No Hostages";
+        result += "\n" + "Neo Damage: " + this.neo.damage;
+        result += "\n" + "Carried Hostages: ";
+        if (this.neo.carriedHostages.size() == 0) {
+            result += "No Hostages";
         }
-        else{
-        for (Hostage hostage : this.neo.carriedHostages) {
-            result+="H("+hostage.damage+") ";
-
+        else {
+            for (Hostage hostage : this.neo.carriedHostages) {
+                result += "H(" + hostage.damage + ") ";
+            }
         }
-    }
         return result;
     }
 

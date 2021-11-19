@@ -2,7 +2,6 @@ package code;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-
 import code.searchproblem.general.*;
 import code.searchproblem.strategies.SearchStrategy;
 import code.matrix.evaluationfunctions.*;
@@ -252,27 +251,28 @@ public class Matrix extends SearchProblem {
         
         SearchTreeNode currentNode = goalNode;
         String plan = "";
-        LinkedList<String> gridVisualize=new LinkedList<String>();
-        while (currentNode.parent != null) {
-            String currentOperator = currentNode.operator.toString().toLowerCase();
-            MatrixState currentState=new MatrixState(currentNode.state);
-            gridVisualize.addFirst(currentState.toString());
+        LinkedList<String> gridVisualize = new LinkedList<String>();
+        while (currentNode != null) {
+            String currentOperator = currentNode.operator != null ? currentNode.operator.toString().toLowerCase() : "";
             if (currentOperator.equals("takepill")) {
                 currentOperator = "takePill";
             }
             plan = currentOperator + plan;
+            plan = ((currentNode.parent != null && currentNode.parent.parent != null) ? "," : "") + plan;
+            if (visualize) {
+                MatrixState currentState = new MatrixState(currentNode.state);
+                String grid = "Operator: " + currentOperator + "\n\n";
+                grid += currentState.toString();
+                gridVisualize.addFirst(grid);
+            }
             currentNode = currentNode.parent;
-            plan = (currentNode.parent == null? "": ",") + plan;
         }
-        MatrixState currentState=new MatrixState(currentNode.state);
-        gridVisualize.addFirst(currentState.toString());
 
         if (visualize) {
-           for (String currenString : gridVisualize) {
-               System.out.println(currenString);
-               System.out.println("_________________________________________________________________________"+"\n");
-               
-               
+           for (String grid : gridVisualize) {
+                MatrixState initialState = (MatrixState) matrix.initialState;
+                System.out.println("\n" + grid);
+                System.out.println("_".repeat(15 * (initialState.m+1)));
            }
         }
 
