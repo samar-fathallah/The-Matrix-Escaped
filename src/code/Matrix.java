@@ -106,7 +106,7 @@ public class Matrix extends SearchProblem {
         MatrixState state = new MatrixState(node.state);
         int numberOfAgents = state.agents.size();
         int numberOfHostages = state.hostages.size();
-        int base = Integer.max(numberOfAgents, numberOfHostages);
+        int base = Integer.max(numberOfAgents, numberOfHostages) + 1;
         int numberOfDeaths = state.getDeaths();
         int numberOfKills = state.getAgentKills();
         int pathCost = numberOfKills + (base * numberOfDeaths);
