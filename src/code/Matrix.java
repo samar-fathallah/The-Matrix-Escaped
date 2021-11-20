@@ -267,6 +267,8 @@ public class Matrix extends SearchProblem {
             }
             currentNode = currentNode.parent;
         }
+        MatrixState goalState = new MatrixState(goalNode.state);
+        String solution = plan + ";" + goalState.getDeaths() + ";" + goalState.getKills() + ";" + matrix.expandedNodes;
 
         if (visualize) {
            for (String grid : gridVisualize) {
@@ -274,10 +276,10 @@ public class Matrix extends SearchProblem {
                 System.out.println("\n" + grid);
                 System.out.println("_".repeat(15 * (initialState.m+1)));
            }
+           System.out.println("\n" + "Solution: " + solution + "\n");
         }
 
-        MatrixState goalState = new MatrixState(goalNode.state);
-        return plan + ";" + goalState.getDeaths() + ";" + goalState.getKills() + ";" + matrix.expandedNodes;
+        return solution;
     }
     
 }
