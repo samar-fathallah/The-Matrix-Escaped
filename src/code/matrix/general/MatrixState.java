@@ -192,6 +192,14 @@ public class MatrixState extends State {
         stateHash += splitStateString[2] + ";";
         stateHash += splitStateString[4] + ";";
         stateHash += splitStateString[5] + ";";
+        String[] splitHostagesInfo = splitStateString[7].split(",");
+        splitStateString[7] = "";
+        for (int i = 0; i < splitHostagesInfo.length; i++) {
+            if ((i-2) % 6 != 0) {
+                splitStateString[7] += splitHostagesInfo[i];
+                splitStateString[7] += i == splitHostagesInfo.length-1? "": ",";
+            }
+        }
         stateHash += splitStateString[7];
         return stateHash;
     }
