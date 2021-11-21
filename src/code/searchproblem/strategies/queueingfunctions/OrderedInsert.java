@@ -29,7 +29,7 @@ public class OrderedInsert extends QueueingFunction {
                     return;
                 }
             }
-            queue.add(newNode);
+            queue.addLast(newNode);
         }
         else {
             newNode.fValue = evaluationFunction.evaluate(newNode);
@@ -40,7 +40,7 @@ public class OrderedInsert extends QueueingFunction {
                     return;
                 }
             }
-            queue.add(newNode);
+            queue.addLast(newNode);
         }
     }
 
