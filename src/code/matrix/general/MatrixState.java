@@ -18,10 +18,10 @@ public class MatrixState extends State {
     public ArrayList<Hostage> hostages;
 
     public MatrixState(String stateString) {
-        this.stateString = stateString;
+        super(stateString);
 
         // Decode string of the state into state object
-        String[] splitStateString = stateString.split(";");
+        String[] splitStateString = this.stateString.split(";");
         String[] gridDimensions = splitStateString[0].split(",");
         this.m = Integer.parseInt(gridDimensions[0]);
         this.n = Integer.parseInt(gridDimensions[1]);
@@ -51,7 +51,6 @@ public class MatrixState extends State {
             if (this.grid[hostage.position.x][hostage.position.y] == null && !hostage.isCarried && !hostage.isKilled) {
                 this.grid[hostage.position.x][hostage.position.y] = hostage;
             }
-
             // Update carriedHostages array in neo
             if (hostage.isCarried) {
                 this.neo.carriedHostages.add(hostage);

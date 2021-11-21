@@ -4,6 +4,10 @@ public abstract class State {
     
     public String stateString;
 
+    public State(String stateString) {
+        this.stateString = stateString;
+    }
+
     public abstract State clone();
 
     public abstract String hash();
