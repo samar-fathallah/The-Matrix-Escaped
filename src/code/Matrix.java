@@ -65,11 +65,9 @@ public class Matrix extends SearchProblem {
     
     @Override
     public State getNextState(State state, Operator operator) {
-        MatrixState matrixState = (MatrixState) state;
-        MatrixOperator matrixOperator = (MatrixOperator) operator;
-        if (matrixState.isValidOperator(operator)) {
-            State nextState = matrixState.clone();
-            nextState.updateState(matrixOperator);
+        if (state.isValidOperator(operator)) {
+            State nextState = state.clone();
+            nextState.updateState(operator);
             return nextState;
         }
          return null;

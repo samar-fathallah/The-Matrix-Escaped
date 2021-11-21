@@ -23,7 +23,7 @@ public class SearchStrategy {
 
         LinkedList<SearchTreeNode> queue = new LinkedList<SearchTreeNode>();
         HashSet<String> visitedStates = new HashSet<String>();
-        queue.add(new SearchTreeNode(problem.initialState.encode()));
+        queue.add(new SearchTreeNode(problem.initialState.stateString));
         visitedStates.add(problem.initialState.hash());
         while (!queue.isEmpty()) {
             problem.expandedNodes++;
@@ -46,7 +46,7 @@ public class SearchStrategy {
                     String nextStateHash = nextState.hash();
                     if (!visitedStates.contains(nextStateHash)) {
                         visitedStates.add(nextStateHash);
-                        SearchTreeNode nextNode = new SearchTreeNode(nextState.encode(), currentNode, operator);
+                        SearchTreeNode nextNode = new SearchTreeNode(nextState.stateString, currentNode, operator);
                         nextNode.pathCost = problem.pathCost(nextNode);
                         queueingFunction.enqueue(queue, nextNode);
                     }

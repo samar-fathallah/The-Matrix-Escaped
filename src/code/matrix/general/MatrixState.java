@@ -18,6 +18,8 @@ public class MatrixState extends State {
     public ArrayList<Hostage> hostages;
 
     public MatrixState(String stateString) {
+        this.stateString = stateString;
+
         // Decode string of the state into state object
         String[] splitStateString = stateString.split(";");
         String[] gridDimensions = splitStateString[0].split(",");
@@ -144,50 +146,12 @@ public class MatrixState extends State {
 
     @Override
     public State clone() {
-        return new MatrixState(this.encode());
-    }
-
-    @Override
-    public String encode() {
-        String stateString = "";
-        stateString += this.m + "," + this.n + ";" + this.neo.carryCapacity + ";";
-        stateString += this.neo.position.x + "," + this.neo.position.y + "," + this.neo.damage + ";";
-        stateString += this.telephoneBooth.position.x + "," + this.telephoneBooth.position.y + ";";
-        for (int i = 0; i < this.agents.size(); i++) {
-            Agent agent = this.agents.get(i);
-            stateString += agent.position.x + "," + agent.position.y;
-            stateString += "," + (agent.isKilled ? "t" : "f");
-            stateString += i == this.agents.size()-1 ? ";" : ",";
-        }
-        for (int i = 0; i < this.pills.size(); i++) {
-            Pill pill = this.pills.get(i);
-            stateString += pill.position.x + "," + pill.position.y;
-            stateString += "," + (pill.isTaken ? "t" : "f");
-            stateString += i == this.pills.size()-1 ? ";" : ",";
-        }
-        for (int i = 0; i < this.pads.size(); i++) {
-            Pad pad = this.pads.get(i);
-            stateString += pad.start.x + "," + pad.start.y + ",";
-            stateString += pad.finish.x + "," + pad.finish.y;
-            stateString += i == this.pads.size()-1 ? ";" : ",";
-        }
-        for (int i = 0; i < this.hostages.size(); i++) {
-            Hostage hostage = this.hostages.get(i);
-            stateString += hostage.position.x + "," + hostage.position.y;
-            stateString += "," + hostage.damage;
-            stateString += "," + (hostage.isAgent ? "t" : "f");
-            stateString += "," + (hostage.isKilled ? "t" : "f");
-            stateString += "," + (hostage.isCarried ? "t" : "f");
-            stateString += i == this.hostages.size()-1 ? "" : ",";
-        }
-        
-        return stateString;
+        return new MatrixState(this.stateString);
     }
 
     @Override
     public String hash() {
-        String stateString = this.encode();
-        String[] splitStateString = stateString.split(";");
+        String[] splitStateString = this.stateString.split(";");
         String stateHash = "";
         stateHash += splitStateString[2] + ";";
         stateHash += splitStateString[4] + ";";
@@ -540,8 +504,46 @@ public class MatrixState extends State {
                 }
             }
         }
+
+        this.stateString = this.encode();
     }
-    
+
+    private String encode() {
+        String stateString = "";
+        stateString += this.m + "," + this.n + ";" + this.neo.carryCapacity + ";";
+        stateString += this.neo.position.x + "," + this.neo.position.y + "," + this.neo.damage + ";";
+        stateString += this.telephoneBooth.position.x + "," + this.telephoneBooth.position.y + ";";
+        for (int i = 0; i < this.agents.size(); i++) {
+            Agent agent = this.agents.get(i);
+            stateString += agent.position.x + "," + agent.position.y;
+            stateString += "," + (agent.isKilled ? "t" : "f");
+            stateString += i == this.agents.size()-1 ? ";" : ",";
+        }
+        for (int i = 0; i < this.pills.size(); i++) {
+            Pill pill = this.pills.get(i);
+            stateString += pill.position.x + "," + pill.position.y;
+            stateString += "," + (pill.isTaken ? "t" : "f");
+            stateString += i == this.pills.size()-1 ? ";" : ",";
+        }
+        for (int i = 0; i < this.pads.size(); i++) {
+            Pad pad = this.pads.get(i);
+            stateString += pad.start.x + "," + pad.start.y + ",";
+            stateString += pad.finish.x + "," + pad.finish.y;
+            stateString += i == this.pads.size()-1 ? ";" : ",";
+        }
+        for (int i = 0; i < this.hostages.size(); i++) {
+            Hostage hostage = this.hostages.get(i);
+            stateString += hostage.position.x + "," + hostage.position.y;
+            stateString += "," + hostage.damage;
+            stateString += "," + (hostage.isAgent ? "t" : "f");
+            stateString += "," + (hostage.isKilled ? "t" : "f");
+            stateString += "," + (hostage.isCarried ? "t" : "f");
+            stateString += i == this.hostages.size()-1 ? "" : ",";
+        }
+        
+        return stateString;
+    }
+
     public int getDeaths() {
         int deaths = 0;
         for (Hostage hostage : hostages) {
