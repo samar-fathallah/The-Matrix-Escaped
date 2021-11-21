@@ -105,6 +105,56 @@ public class Matrix extends SearchProblem {
         return pathCost;
     }
 
+    public boolean checkSolution(String solution, boolean visualize) {
+        String[] splitSolution = solution.split(";");
+        String[] plan = splitSolution[0].split(",");
+        int numberOfDeaths = Integer.parseInt(splitSolution[1]);
+        int numberOfKills = Integer.parseInt(splitSolution[2]);
+        boolean isValidSolution = true;
+        
+        MatrixState currentState = (MatrixState) this.initialState;
+        String visualizedSolution = "\n" + "Initial state" + "\n\n";
+        visualizedSolution += currentState;
+        visualizedSolution += "\n" + "_".repeat(15 * (currentState.m+1)) + "\n\n";
+        for (String operator : plan) {
+            currentState = (MatrixState) getNextState(currentState, MatrixOperator.getOperator(operator));
+            if (currentState == null) {
+                isValidSolution = false;
+                visualizedSolution += "Invalid operator: " + operator;
+                break;
+            }
+            else {
+                visualizedSolution += "Operator: " + operator + "\n\n";
+                visualizedSolution += currentState;
+                visualizedSolution += "\n" + "_".repeat(15 * (currentState.m+1)) + "\n\n";
+            }
+        }
+        
+        if (isValidSolution) {
+            if (!this.goalTest(currentState)) {
+                isValidSolution = false;
+                visualizedSolution += "The final state is not a goal state";
+            }
+            else if (currentState.getDeaths() != numberOfDeaths) {
+                isValidSolution = false;
+                visualizedSolution += "The number of deaths is not correct";
+            }
+            else if (currentState.getAgentKills() != numberOfKills) {
+                isValidSolution = false;
+                visualizedSolution += "The number of kills is not correct";
+            }
+            else {
+                visualizedSolution += "The solution is valid";
+            }
+        }
+
+        if (visualize) {
+            visualizedSolution += "\n";
+            System.out.println(visualizedSolution);
+        }
+        return isValidSolution;
+    }
+
     public static String genGrid() {
         // Generate grid size
         int m = HelperMethods.genrateRandomInt(5, 16);
@@ -253,8 +303,8 @@ public class Matrix extends SearchProblem {
             plan = ((currentNode.parent != null && currentNode.parent.parent != null) ? "," : "") + plan;
             if (visualize) {
                 MatrixState currentState = new MatrixState(currentNode.state);
-                String grid = "Operator: " + currentOperator + "\n\n";
-                grid += currentState.toString();
+                String grid = currentOperator != "" ? "Operator: " + currentOperator + "\n\n" : "Initial state" + "\n\n";
+                grid += currentState;
                 gridVisualize.addFirst(grid);
             }
             currentNode = currentNode.parent;
