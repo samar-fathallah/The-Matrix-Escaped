@@ -83,8 +83,7 @@ public class SearchStrategy {
     }
 
     public static SearchTreeNode bestFirstSearch(SearchProblem problem, EvaluationFunction evaluationFunction) {
-        QueueingFunction queueingFunction = new OrderedInsert(evaluationFunction);
-        return generalSearch(problem, queueingFunction);
+        return generalSearch(problem, new OrderedInsert(evaluationFunction));
     }
     
 }
