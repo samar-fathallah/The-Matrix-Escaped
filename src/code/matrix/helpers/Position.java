@@ -20,5 +20,8 @@ public class Position {
         Position p = (Position) obj;
         return this.x == p.x && this.y == p.y;
     }
-
+    
+    public int getManhattanDistance(Position position){
+        return Math.abs(this.x-position.x)+Math.abs(this.y-position.y);
+    }
 }
