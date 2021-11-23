@@ -96,13 +96,11 @@ public class Matrix extends SearchProblem {
     @Override
     public int pathCost(SearchTreeNode node) {
         MatrixState state = new MatrixState(node.state);
-        int numberOfAgents = state.agents.size();
-        int numberOfHostages = state.hostages.size();
-        int base = Integer.max(numberOfAgents, numberOfHostages) + 1;
+        int base = state.getMaximumNumberOfSteps() + 1;
+        int numberOfSteps = node.depth;
+        int numberOfKills = state.getKills();
         int numberOfDeaths = state.getDeaths();
-        int numberOfKills = state.getAgentKills();
-        int pathCost = numberOfKills + (base * numberOfDeaths);
-        return pathCost;
+        return numberOfSteps + (numberOfKills * base) + (numberOfDeaths * base * base);
     }
 
     public boolean checkSolution(String solution, boolean visualize) {

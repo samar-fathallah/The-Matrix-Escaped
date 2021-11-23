@@ -580,4 +580,15 @@ public class MatrixState extends State {
         return kills;
     }
     
+    public int getMaximumNumberOfSteps() {
+        int maximumTakePill = this.pills.size();
+        int maximumCarry = this.hostages.size();
+        int maximumDrop = this.hostages.size();
+        int maximumKills = this.hostages.size() + this.agents.size();
+        int maximumPossibleLocations = this.m * this.n;
+        int maximumSteps = maximumPossibleLocations * (maximumTakePill + maximumCarry + maximumDrop + maximumKills + 1);
+        int maximumDamageSteps = (100 + 20 * this.pills.size()) / 2;
+        return maximumDamageSteps + maximumSteps;
+    }
+
 }
