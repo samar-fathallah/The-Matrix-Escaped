@@ -1,6 +1,7 @@
 package code.searchproblem.strategies.queueingfunctions;
 
 import java.util.LinkedList;
+import java.util.ListIterator;
 import code.searchproblem.general.SearchTreeNode;
 import code.searchproblem.strategies.EvaluationFunction;
 import code.searchproblem.strategies.QueueingFunction;
@@ -22,10 +23,12 @@ public class OrderedInsert extends QueueingFunction {
 
     public void enqueue(LinkedList<SearchTreeNode> queue, SearchTreeNode newNode) {
         if (!isBestFirst) {
-            for (int i = 0; i < queue.size(); i++) {
-                SearchTreeNode currentNode = queue.get(i);
+            ListIterator<SearchTreeNode> iterator = queue.listIterator();
+            while (iterator.hasNext()) {
+                SearchTreeNode currentNode = iterator.next();
                 if (newNode.pathCost < currentNode.pathCost) {
-                    queue.add(i, newNode);
+                    iterator.previous();
+                    iterator.add(newNode);
                     return;
                 }
             }
@@ -33,10 +36,12 @@ public class OrderedInsert extends QueueingFunction {
         }
         else {
             newNode.fValue = evaluationFunction.evaluate(newNode);
-            for (int i = 0; i < queue.size(); i++) {
-                SearchTreeNode currentNode = queue.get(i);
+            ListIterator<SearchTreeNode> iterator = queue.listIterator();
+            while (iterator.hasNext()) {
+                SearchTreeNode currentNode = iterator.next();
                 if (newNode.fValue < currentNode.fValue) {
-                    queue.add(i, newNode);
+                    iterator.previous();
+                    iterator.add(newNode);
                     return;
                 }
             }
