@@ -293,8 +293,13 @@ public class Matrix extends SearchProblem {
                 break;
         }
         
-        if (goalNode == null)
+        if (goalNode == null) {
+            if (visualize) {
+                System.out.println("No Solution");
+                System.out.println("Number of expanded nodes: " + matrix.expandedNodes);
+            }
             return "No Solution";
+        }
         
         SearchTreeNode currentNode = goalNode;
         String plan = "";
