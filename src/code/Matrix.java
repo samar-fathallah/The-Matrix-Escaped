@@ -183,16 +183,16 @@ public class Matrix extends SearchProblem {
         // Populate grid
         ArrayList<Position> taken = new ArrayList<Position>();
     
-        Position neoPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+        Position neoPosition = Position.genrateRandomPosition(m, n, taken);
         taken.add(neoPosition);
     
-        Position telephoneBoothPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+        Position telephoneBoothPosition = Position.genrateRandomPosition(m, n, taken);
         taken.add(telephoneBoothPosition);
     
         ArrayList<Position> hostagesPositions = new ArrayList<Position>();
         ArrayList<Integer> hostagesDamages = new ArrayList<Integer>();
         for (int i = 0; i < numberOfHostages; i++) {
-            Position hostagePosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            Position hostagePosition = Position.genrateRandomPosition(m, n, taken);
             hostagesPositions.add(hostagePosition);
             taken.add(hostagePosition);
             hostagesDamages.add(HelperMethods.genrateRandomInt(1, 100));
@@ -200,7 +200,7 @@ public class Matrix extends SearchProblem {
     
         ArrayList<Position> pillsPositions = new ArrayList<Position>();
         for (int i = 0; i < numberOfPills; i++) {
-            Position pillPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            Position pillPosition = Position.genrateRandomPosition(m, n, taken);
             pillsPositions.add(pillPosition);
             taken.add(pillPosition);
         }
@@ -208,17 +208,17 @@ public class Matrix extends SearchProblem {
         ArrayList<Position> startPadsPositions = new ArrayList<Position>();
         ArrayList<Position> finishPadsPositions = new ArrayList<Position>();
         for (int i = 0; i < numberOfPads; i++) {
-            Position startPadPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            Position startPadPosition = Position.genrateRandomPosition(m, n, taken);
             taken.add(startPadPosition);
             startPadsPositions.add(startPadPosition);
-            Position finishPadPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            Position finishPadPosition = Position.genrateRandomPosition(m, n, taken);
             taken.add(finishPadPosition);
             finishPadsPositions.add(finishPadPosition);
         }
     
         ArrayList<Position> agentsPositions = new ArrayList<Position>();
         for (int i = 0; i < numberOfAgents; i++) {
-            Position agentPosition = HelperMethods.genrateRandomPosition(m, n, taken);
+            Position agentPosition = Position.genrateRandomPosition(m, n, taken);
             agentsPositions.add(agentPosition);
             taken.add(agentPosition);
         }
