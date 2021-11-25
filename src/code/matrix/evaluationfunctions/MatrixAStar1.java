@@ -7,7 +7,7 @@ public class MatrixAStar1 extends EvaluationFunction {
 
     @Override
     public int evaluate(SearchTreeNode node) {
-        return node.pathCost + MatrixHeuristics.h1(node);
+        return node.pathCost + MatrixHeuristics.admissableHeuristic1(node);
     }
 
 }

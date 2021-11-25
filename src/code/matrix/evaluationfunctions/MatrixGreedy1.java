@@ -7,7 +7,7 @@ public class MatrixGreedy1 extends EvaluationFunction {
 
     @Override
     public int evaluate(SearchTreeNode node) {
-        return MatrixHeuristics.h1(node);
+        return MatrixHeuristics.heuristic1(node);
     }
 
 }
