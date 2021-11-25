@@ -12,6 +12,8 @@ import code.matrix.objects.*;
 
 public class Matrix extends SearchProblem {
 
+    private int maximumNumberOfSteps;
+
     public Matrix(String initialGrid) {
         // Create and populate the array of opeators
         this.operators = new ArrayList<Operator>(9);
@@ -58,9 +60,14 @@ public class Matrix extends SearchProblem {
         // Create the initial state object
         this.initialState = new MatrixState(initialStateString);
 
-        // Set the name of the state class and the number of expanded nodes
+        // Set the name of the state class
         this.stateClassName = this.initialState.getClass().getName();
+        
+        // Initialize the number of expanded nodes
         this.expandedNodes = 0;
+
+        // Set the maximum number of steps for this matrix problem
+        this.maximumNumberOfSteps = ((MatrixState) this.initialState).getMaximumNumberOfSteps();
     }
     
     @Override
@@ -96,7 +103,7 @@ public class Matrix extends SearchProblem {
     @Override
     public int pathCost(SearchTreeNode node) {
         MatrixState state = new MatrixState(node.state);
-        int base = state.getMaximumNumberOfSteps() + 1;
+        int base = this.maximumNumberOfSteps + 1;
         int numberOfSteps = node.depth;
         int numberOfKills = state.getKills();
         int numberOfDeaths = state.getDeaths();
