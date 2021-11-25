@@ -761,11 +761,16 @@ public class TestMatrixPublic {
 						int beatles = m7.get(abc)-20 <0? 0 : m7.get(abc)-20;
 						m7.put(abc,beatles);
 					}
+					for(String abc: m6.keySet()) {
+						if(m6.get(abc)<100) {
+							int beatles = m6.get(abc)-20 <0? 0 : m6.get(abc)-20;
+							m6.put(abc,beatles);
+						}
+					}
 					this.m4.remove(f1(x00,x01));
 					return true;
 				}
 				return false;
-				
 			}
 			
 			public void ll2() {
