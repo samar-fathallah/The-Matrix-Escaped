@@ -323,7 +323,8 @@ public class Matrix extends SearchProblem {
                 System.out.println("\n" + grid);
                 System.out.println("_".repeat(15 * (initialState.m+1)));
            }
-           System.out.println("\n" + "Solution: " + solution + "\n");
+           System.out.println("\n" + "Solution: " + solution);
+           System.out.println("Number of steps: " + plan.split(",").length + "\n");
         }
 
         return solution;
