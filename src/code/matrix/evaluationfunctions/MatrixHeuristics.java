@@ -11,25 +11,7 @@ import code.searchproblem.general.SearchTreeNode;
 public class MatrixHeuristics {
 
     public static int heuristic1(SearchTreeNode node) {
-        MatrixState state = new MatrixState(node.state);
-        
-        int remainingHostages = 0;
-        int nearestHostageDistance = Integer.MAX_VALUE;
-        for (Hostage hostage : state.hostages) {
-            if (isRemainingHostage(hostage, state.telephoneBooth)) {
-                remainingHostages++;
-                int hostageDistance = getMinimumDistance(state.neo.position, hostage.position, state.pads);
-                if (hostageDistance < nearestHostageDistance) {
-                    nearestHostageDistance = hostageDistance;
-                }
-            }
-        }
-        
-        if (remainingHostages == 0) {
-            return getMinimumDistance(state.neo.position, state.telephoneBooth.position, state.pads);
-        }
-
-        return nearestHostageDistance * remainingHostages;
+        return admissableHeuristic1(node);
     }
 
     public static int heuristic2(SearchTreeNode node) {
@@ -79,7 +61,7 @@ public class MatrixHeuristics {
         return (!hostage.isAgent && !hostage.position.equals(telephoneBooth.position) && !hostage.isCarried) || (hostage.isAgent && !hostage.isKilled);
     }
 
-    public static int getMinimumDistance(Position start, Position end, ArrayList<Pad> pads){
+    public static int getMinimumDistance(Position start, Position end, ArrayList<Pad> pads) {
         int minDistanceWithoutPad = start.getManhattanDistance(end);
         int minDistanceWithPad = Integer.MAX_VALUE;
         for (Pad pad: pads) {
