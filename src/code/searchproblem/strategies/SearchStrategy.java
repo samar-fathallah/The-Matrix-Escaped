@@ -40,15 +40,14 @@ public class SearchStrategy {
             if (problem.goalTest(currentState)) {
                 return currentNode;
             }
+
             for (Operator operator : problem.operators) {
                 State nextState = problem.getNextState(currentState, operator);
                 if (nextState != null) {
-                    String nextStateHash = nextState.hash();
-                    if (!visitedStates.contains(nextStateHash)) {
-                        visitedStates.add(nextStateHash);
-                        SearchTreeNode nextNode = new SearchTreeNode(nextState.stateString, currentNode, operator);
-                        nextNode.pathCost = problem.pathCost(nextNode);
-                        queueingFunction.enqueue(queue, nextNode);
+                    if (visitedStates.add(nextState.hash())) {
+                        SearchTreeNode newNode = new SearchTreeNode(nextState.stateString, currentNode, operator);
+                        newNode.pathCost = problem.pathCost(newNode);
+                        queueingFunction.enqueue(queue, newNode);
                     }
                 }
             }
