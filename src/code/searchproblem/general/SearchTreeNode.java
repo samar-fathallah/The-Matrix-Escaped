@@ -6,8 +6,8 @@ public class SearchTreeNode {
     public SearchTreeNode parent;
     public Operator operator;
     public int depth;
-    public int pathCost;
-    public int fValue;
+    public long pathCost;
+    public long fValue;
 
     // Constructor For Root Node Creation
     public SearchTreeNode(String state) {

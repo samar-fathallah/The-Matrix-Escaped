@@ -4,6 +4,6 @@ import code.searchproblem.general.SearchTreeNode;
 
 public abstract class EvaluationFunction {
     
-    public abstract int evaluate(SearchTreeNode node);
+    public abstract long evaluate(SearchTreeNode node);
 
 }

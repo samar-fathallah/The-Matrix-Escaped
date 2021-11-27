@@ -6,7 +6,7 @@ import code.searchproblem.strategies.EvaluationFunction;
 public class MatrixGreedy1 extends EvaluationFunction {
 
     @Override
-    public int evaluate(SearchTreeNode node) {
+    public long evaluate(SearchTreeNode node) {
         return MatrixHeuristics.heuristic1(node);
     }
 

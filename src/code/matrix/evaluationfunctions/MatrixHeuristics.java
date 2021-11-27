@@ -6,15 +6,15 @@ import code.searchproblem.general.SearchTreeNode;
 
 public class MatrixHeuristics {
 
-    public static int heuristic1(SearchTreeNode node) {
+    public static long heuristic1(SearchTreeNode node) {
         return admissableHeuristic1(node);
     }
 
-    public static int heuristic2(SearchTreeNode node) {
+    public static long heuristic2(SearchTreeNode node) {
         return admissableHeuristic2(node);
     }
 
-    public static int admissableHeuristic1(SearchTreeNode node) {
+    public static long admissableHeuristic1(SearchTreeNode node) {
         MatrixState state = new MatrixState(node.state);
 
         Hostage furthestHostage = null;
@@ -41,7 +41,7 @@ public class MatrixHeuristics {
         return hostageDistance + boothDistance - 1;
     }
 
-    public static int admissableHeuristic2(SearchTreeNode node) {
+    public static long admissableHeuristic2(SearchTreeNode node) {
         MatrixState state = new MatrixState(node.state);
 
         int remainingHostages = 0;

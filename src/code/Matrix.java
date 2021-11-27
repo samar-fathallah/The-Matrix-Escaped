@@ -95,12 +95,12 @@ public class Matrix extends SearchProblem {
     }
     
     @Override
-    public int pathCost(SearchTreeNode node) {
+    public long pathCost(SearchTreeNode node) {
         MatrixState state = new MatrixState(node.state);
-        int base = this.maximumNumberOfSteps + 1;
-        int numberOfSteps = node.depth;
-        int numberOfKills = state.getKills();
-        int numberOfDeaths = state.getDeaths();
+        long base = this.maximumNumberOfSteps + 1;
+        long numberOfSteps = node.depth;
+        long numberOfKills = state.getKills();
+        long numberOfDeaths = state.getDeaths();
         return numberOfSteps + (numberOfKills * base) + (numberOfDeaths * base * base);
     }
 
