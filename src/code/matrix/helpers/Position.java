@@ -1,6 +1,7 @@
 package code.matrix.helpers;
 
 import java.util.ArrayList;
+import code.matrix.objects.Pad;
 
 public class Position {
 
@@ -18,8 +19,20 @@ public class Position {
         return this.x == p.x && this.y == p.y;
     }
     
-    public int getManhattanDistance(Position position) {
-        return Math.abs(this.x - position.x) + Math.abs(this.y - position.y);
+    public int getManhattanDistance(Position endPosition) {
+        return Math.abs(this.x - endPosition.x) + Math.abs(this.y - endPosition.y);
+    }
+
+    public int getMinimumDistance(Position endPosition, ArrayList<Pad> pads) {
+        int minDistanceWithoutPad = this.getManhattanDistance(endPosition);
+        int minDistanceWithPad = Integer.MAX_VALUE;
+        for (Pad pad: pads) {
+            int distanceWithPad = this.getManhattanDistance(pad.start) + endPosition.getManhattanDistance(pad.finish) + 1;
+            if (distanceWithPad < minDistanceWithPad) {
+                minDistanceWithPad = distanceWithPad;
+            }
+        }
+        return Integer.min(minDistanceWithPad, minDistanceWithoutPad);
     }
 
     public static Position genrateRandomPosition(int m, int n, ArrayList<Position> takenPositions) {

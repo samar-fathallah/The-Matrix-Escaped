@@ -399,7 +399,7 @@ public class MatrixState extends State {
                     neo.damage = 0;
                 }
                 for (Hostage hostage : hostages) {
-                    if (hostage.damage < 100) {
+                    if (hostage.damage < 100 && !hostage.isDropped(telephoneBooth)) {
                         hostage.damage -= 20;
                         if (hostage.damage < 0) {
                             hostage.damage = 0;
@@ -484,7 +484,7 @@ public class MatrixState extends State {
 
         if (matrixOperator != MatrixOperator.TAKEPILL) {
             for (Hostage hostage : hostages) {
-                if (!hostage.isAgent && (!hostage.position.equals(telephoneBooth.position) || hostage.isCarried)) {
+                if (hostage.damage < 100 && !hostage.isDropped(telephoneBooth)) {
                     hostage.damage += 2;
                     if (hostage.damage >= 100) {
                         hostage.damage = 100;

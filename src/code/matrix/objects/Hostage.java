@@ -19,6 +19,21 @@ public class Hostage {
         this.isCarried = isCarried;
     }
 
+    // returns true if the hostage was dropped at the telephone booth
+    public boolean isDropped(TelephoneBooth telephoneBooth) {
+        return this.position.equals(telephoneBooth.position) && !this.isCarried;
+    }
+
+    // returns true if the hostage is not in the matrix anymore (killed or dropped)
+    public boolean isDisappeared(TelephoneBooth telephoneBooth) {
+        return (!this.isAgent && this.isDropped(telephoneBooth)) || (this.isAgent && this.isKilled);
+    }
+
+    // returns true if the hostage is not yet handled by neo (not carried, dropped, or killed)
+    public boolean isRemaining(TelephoneBooth telephoneBooth) {
+        return (!this.isAgent && !this.isCarried && !this.position.equals(telephoneBooth.position)) || (this.isAgent && !this.isKilled);
+    }
+
     public static ArrayList<Hostage> createHostages(String hostagesInfo) {
         String[] splitInfo = hostagesInfo.split(",");
         ArrayList<Hostage> hostages = new ArrayList<Hostage>();
@@ -34,5 +49,5 @@ public class Hostage {
         }
         return hostages;
     }
-    
+
 }
