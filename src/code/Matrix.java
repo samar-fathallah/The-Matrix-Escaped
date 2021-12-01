@@ -317,13 +317,13 @@ public class Matrix extends SearchProblem {
         String solution = plan + ";" + goalState.getDeaths() + ";" + goalState.getKills() + ";" + matrix.expandedNodes;
 
         if (visualize) {
-           for (String grid : gridVisualize) {
-                MatrixState initialState = (MatrixState) matrix.initialState;
+            MatrixState initialState = (MatrixState) matrix.initialState;
+            for (String grid : gridVisualize) {
                 System.out.println("\n" + grid);
                 System.out.println("_".repeat(15 * (initialState.m+1)));
-           }
-           System.out.println("\n" + "Solution: " + solution);
-           System.out.println("Number of steps: " + plan.split(",").length + "\n");
+            }
+            System.out.println("\n" + "Solution: " + solution);
+            System.out.println("Number of steps: " + plan.split(",").length + "\n");
         }
 
         return solution;
