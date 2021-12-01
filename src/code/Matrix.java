@@ -83,15 +83,15 @@ public class Matrix extends SearchProblem {
     @Override
     public boolean goalTest(State state) {
         MatrixState matrixState = (MatrixState) state;
-        boolean neoAtBooth = matrixState.neo.position.equals(matrixState.telephoneBooth.position);
-        boolean hostagesDisappeared = true;
+        if (!matrixState.neo.position.equals(matrixState.telephoneBooth.position)) {
+            return false;
+        }
         for (Hostage hostage : matrixState.hostages) {
             if (!hostage.isDisappeared(matrixState.telephoneBooth)) {
-                hostagesDisappeared = false;
-                break;
+                return false;
             }
         }
-        return neoAtBooth && hostagesDisappeared;
+        return true;
     }
     
     @Override
